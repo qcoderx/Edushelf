@@ -12,6 +12,7 @@ const DashboardScreen = ({ navigation }) => {
     { id: 'progress-analytics', name: 'Progress Analytics', icon: 'analytics', screen: 'ProgressAnalytics' },
     { id: 'digital-notebook', name: 'Digital Notebook', icon: 'book', screen: 'DigitalNotebook' },
     { id: 'leaderboard', name: 'Leaderboard', icon: 'trophy', screen: 'Leaderboard' },
+    { id: 'virtual-lab', name: 'Virtual Lab', icon: 'flask', screen: 'VirtualLabHub' },
   ];
 
   const weeklyData = [
@@ -284,26 +285,28 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   quickAccessCard: {
-    width: '47%',
+    width: '22%',
     backgroundColor: colors.cardDark,
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
     alignItems: 'center',
-    gap: 8,
+    gap: 6,
+    marginBottom: 12,
   },
   quickAccessIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
     alignItems: 'center',
   },
   quickAccessText: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
     color: colors.white,
     textAlign: 'center',
+    lineHeight: 14,
   },
   chartCard: {
     margin: 16,

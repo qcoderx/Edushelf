@@ -23,6 +23,8 @@ import SmartScheduleScreen from '../screens/SmartScheduleScreen';
 import ProgressAnalyticsScreen from '../screens/ProgressAnalyticsScreen';
 import DigitalNotebookScreen from '../screens/DigitalNotebookScreen';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
+import VirtualLabHubScreen from '../screens/VirtualLabHubScreen';
+import ActiveExperimentScreen from '../screens/ActiveExperimentScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,6 +98,8 @@ const AppNavigator = () => (
       <Stack.Screen name="ProgressAnalytics" component={ProgressAnalyticsScreen} />
       <Stack.Screen name="DigitalNotebook" component={DigitalNotebookScreen} />
       <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
+      <Stack.Screen name="VirtualLabHub" component={VirtualLabHubScreen} />
+      <Stack.Screen name="ActiveExperiment" component={ActiveExperimentScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );
