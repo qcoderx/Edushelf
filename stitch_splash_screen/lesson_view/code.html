@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lesson View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#005A9C",
+            "interactive": "#2DE2E6",
+            "feedback": "#7F2AF0",
+            "background-light": "#F8F9FA",
+            "background-dark": "#101922",
+            "text-light": "#212529",
+            "text-dark": "#F8F9FA",
+            "success": "#28A745",
+            "error": "#DC3545",
+            "highlight": "#E9F5FF",
+            "highlight-dark": "#1A2C3D"
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center p-4 justify-between">
+<div class="flex size-10 shrink-0 items-center justify-center text-text-light dark:text-text-dark">
+<span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center text-text-light dark:text-text-dark">Lesson: Algebraic Expressions</h2>
+<div class="flex size-10 shrink-0 items-center justify-center text-text-light dark:text-text-dark">
+<span class="material-symbols-outlined text-2xl">bookmark_border</span>
+</div>
+</div>
+<div class="px-4">
+<div class="rounded bg-gray-200 dark:bg-gray-700">
+<div class="h-1.5 rounded bg-interactive" style="width: 35%;"></div>
+</div>
+</div>
+</div>
+<main class="flex-1 pb-32">
+<div class="px-4">
+<h1 class="text-text-light dark:text-text-dark tracking-light text-[32px] font-bold leading-tight pt-6 pb-2 text-left">Introduction to Algebra</h1>
+<p class="text-text-light dark:text-text-dark text-base font-normal leading-relaxed pb-3 pt-1">This lesson introduces the fundamental concepts of algebraic expressions. We will explore variables, coefficients, and the basic operations used to manipulate these expressions.</p>
+</div>
+<div class="px-4">
+<h1 class="text-text-light dark:text-text-dark text-[22px] font-bold leading-tight tracking-[-0.015em] pt-5 pb-3">Quiz: Check Your Understanding</h1>
+</div>
+<div class="px-4">
+<div class="flex flex-col gap-4">
+<p class="text-text-light dark:text-text-dark text-base font-medium leading-relaxed">In the expression 5x + 3, what is the coefficient?</p>
+<div class="space-y-3">
+<label class="flex items-center gap-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-4 transition-all has-[:checked]:border-interactive has-[:checked]:bg-interactive/10 dark:has-[:checked]:bg-interactive/20">
+<input class="h-5 w-5 border-gray-400 text-interactive focus:ring-interactive dark:bg-gray-700 dark:border-gray-500" name="quiz-q1" type="radio"/>
+<span class="text-text-light dark:text-text-dark">5</span>
+</label>
+<label class="flex items-center gap-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-4 transition-all has-[:checked]:border-interactive has-[:checked]:bg-interactive/10 dark:has-[:checked]:bg-interactive/20">
+<input class="h-5 w-5 border-gray-400 text-interactive focus:ring-interactive dark:bg-gray-700 dark:border-gray-500" name="quiz-q1" type="radio"/>
+<span class="text-text-light dark:text-text-dark">x</span>
+</label>
+<label class="flex items-center gap-4 rounded-xl border border-error bg-error/10 dark:bg-error/20 p-4 transition-all">
+<input checked="" class="h-5 w-5 border-error text-error focus:ring-error dark:bg-gray-700 dark:border-gray-500" name="quiz-q1" type="radio"/>
+<span class="text-text-light dark:text-text-dark">3</span>
+</label>
+</div>
+</div>
+</div>
+<div class="px-4 pt-4">
+<div class="flex flex-col gap-2 rounded-xl border border-error p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-xl">cancel</span>
+<p class="font-bold text-error">Incorrect</p>
+</div>
+<p class="text-text-light dark:text-text-dark text-sm">The coefficient is the number multiplied by the variable. In this case, '<span class="text-feedback font-semibold">5</span>' is multiplied by '<span class="text-feedback font-semibold">x</span>'.</p>
+</div>
+</div>
+<div class="px-4 pt-8">
+<div class="rounded-xl bg-feedback/10 dark:bg-feedback/20 p-4 border border-feedback/30">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark mb-2">Lesson Summary</h3>
+<ul class="list-disc space-y-2 pl-5 text-text-light dark:text-text-dark text-base">
+<li><span class="font-semibold">Variable:</span> A symbol (like x or y) that represents a value.</li>
+<li><span class="font-semibold">Coefficient:</span> A number used to multiply a variable.</li>
+<li><span class="font-semibold">Expression:</span> A combination of variables, numbers, and operators.</li>
+</ul>
+</div>
+</div>
+</main>
+<footer class="fixed bottom-0 left-0 right-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="px-4 py-3">
+<button class="w-full rounded-xl bg-interactive py-4 text-center font-bold text-background-dark transition-opacity hover:opacity-90">Continue</button>
+</div>
+</footer>
+</div>
+
+</body></html>

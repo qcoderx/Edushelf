@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumina Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2DE2E6",
+                        "interactive": "#7F2AF0",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col font-display group/design-root overflow-x-hidden">
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<button class="text-slate-800 dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+</div>
+<div class="flex w-full flex-row items-center justify-center gap-2 py-4 px-4">
+<div class="h-1 flex-1 rounded-full bg-interactive"></div>
+<div class="h-1 flex-1 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+<div class="h-1 flex-1 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+<div class="h-1 flex-1 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex-grow flex flex-col px-4">
+<h1 class="text-slate-900 dark:text-white tracking-tight text-[32px] font-bold leading-tight text-left pb-2 pt-4">Welcome to Lumina! What are you preparing for?</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal pb-6 pt-1">Select all that apply to personalize your learning plan.</p>
+<div class="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4">
+<div class="flex flex-col gap-3 pb-3 rounded-xl border-2 border-primary bg-primary/10 p-2 cursor-pointer ring-4 ring-primary/20">
+<div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg" data-alt="Abstract gradient of blue and purple shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDukCE8h_8dbo2NYhfLu2kDTr3zC0QLEdbs7Y2ec_OqpjPmYonv1_KSf_m-2ormd4YJv0ZprujYzLs7Lmx_2rUyICqXGwDRbkmHn5nwlU9t97LI-XVj-zf_8ePYDTp7Pc2hwW3jSTwTnTx-ogh0laNJ-Hs0fZVOGVKKKkPqsnl6UPESMZs0wX0C2J-tfobXZ1SoRxWshKmCY5Q4C57RJ0ApIcb19fuKzLhLqG58PB9A8bY-Y4oV18PwBNw-yP0dIXH4atc2H6QYybw");'></div>
+<div>
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal">WAEC</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Senior School Certificate</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3 rounded-xl border-2 border-transparent hover:border-primary/50 bg-slate-200/50 dark:bg-slate-800/50 p-2 cursor-pointer transition-colors">
+<div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg" data-alt="Abstract gradient of orange and yellow shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBM2LaQHGfJkOKLOlVc7YqOOq5ZwX-qDMmKs1fmQdQolDSd-5iApSoESCCdFryYot64jgdxFVucQ7cOQRKbSzIUV1Kg5WDueB-Kv589OJdXuJ27_N6jP-g-WESUjtRgOkzzew7zWYMHW6GT4zG1R3N1w3NYkh42nNFtJ8sPt3jJB0h6PME5_gWs1IClvY4reYRFaNxSPtBkIMbP2ssEyoUq_mCNYsqdViq0FgONvQyuw7snGN3QzZVRxhPlM7Tos8-HXi49eDwa_xw");'></div>
+<div>
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal">JAMB</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">University Matriculation</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3 rounded-xl border-2 border-transparent hover:border-primary/50 bg-slate-200/50 dark:bg-slate-800/50 p-2 cursor-pointer transition-colors">
+<div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg" data-alt="Abstract gradient of pink and red shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDrQ3mLE9jjuOutWU0AeLnMVH5oz6hCnYZtdmcgocKaOR6bxrkNnW_bbcFzm4zhtDgadY9-0VmAIAATmCN-n1PG6uT9anPBYXqgnpQfchCmHV8-NRyjorjxel1ZAErfBIcPuZL3Pv6MDe1t3N3-3hNZJ29V4qu4EjRi49mS4kX352pLpuJeOX4gOxhNQhJvN-9erbHmmhTQZgdY8nIyk7Y5qr7nD_vdpO_XroXccXsgA5fCWHsyE15f6A9DBialkOI1AbQqy1viIZc");'></div>
+<div>
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal">Post-UTME</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">University Screening</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3 rounded-xl border-2 border-transparent hover:border-primary/50 bg-slate-200/50 dark:bg-slate-800/50 p-2 cursor-pointer transition-colors">
+<div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg" data-alt="Abstract gradient of green and teal shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCNG1HCSUvJdtQMfq-UBD0MJjuUTL7PexhfozW9WpGaPFVxHC6cX452PShN7s_Bdwz_u0QDdfnFFtcsFySAdDLSC774fu8YsnioI5WeLUJs1VXk_B6HACWgA6w1pnhatP0X-T1RY7ES_-tF18zD2g9EqtHC4yg3TjJ2xpAwoJLsF9fu9dF9KgEzBYNKGxNi2OzdC2LXjAFr-VfyPnfCsIUwsaD7qhDNrVVkvK2QOAYTHZRP_x3Slgx06W7ivRSXeoRnt5dTsYgfkBU");'></div>
+<div>
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal">A-Levels</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Advanced Level Exams</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sticky bottom-0 w-full p-4 bg-gradient-to-t from-background-light via-background-light dark:from-background-dark dark:via-background-dark to-transparent mt-8">
+<button class="w-full bg-primary text-slate-900 font-bold py-4 px-4 rounded-xl text-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background-dark">
+                Continue
+            </button>
+</div>
+</div>
+
+</body></html>

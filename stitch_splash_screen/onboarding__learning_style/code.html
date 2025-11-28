@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding: Learning Style</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        /* Custom radio button styles for checked state */
+        .peer:checked~div {
+            border-color: #2DE2E6;
+            background-color: rgba(45, 226, 230, 0.1);
+        }
+        .peer:checked~div .radio-circle {
+            border-color: #2DE2E6;
+        }
+        .peer:checked~div .radio-circle .radio-dot {
+            transform: scale(1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7f28f0",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#181022",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<div class="flex-grow">
+<!-- Top App Bar -->
+<div class="flex items-center p-4">
+<div class="text-black dark:text-white flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+</div>
+<!-- Page Indicators -->
+<div class="flex w-full flex-row items-center justify-center gap-2 px-4 py-3">
+<div class="h-1.5 w-1.5 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+<div class="h-1.5 w-6 rounded-full bg-primary"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+</div>
+<!-- Headline and Body Text -->
+<div class="px-5 pt-4">
+<h1 class="text-slate-900 dark:text-white text-[32px] font-bold leading-tight tracking-tight">How do you learn best?</h1>
+<p class="text-slate-600 dark:text-slate-300 text-base font-normal leading-normal pt-2">Select the style that sounds most like you. This helps us personalize your lessons.</p>
+</div>
+<!-- Radio List as Cards -->
+<div class="flex flex-col gap-4 p-5">
+<label class="relative cursor-pointer">
+<input checked="" class="peer absolute h-0 w-0 opacity-0" name="learning_style" type="radio"/>
+<div class="flex items-center gap-4 rounded-xl border border-solid border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 p-4 transition-all duration-200">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">visibility</span>
+</div>
+<div class="flex-grow">
+<p class="text-slate-800 dark:text-white text-base font-medium leading-normal">Visual</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">I understand concepts best with diagrams, charts, and videos.</p>
+</div>
+<div class="radio-circle flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 dark:border-slate-600 transition-all duration-200">
+<div class="radio-dot h-2.5 w-2.5 rounded-full bg-[#2DE2E6] scale-0 transition-transform duration-200"></div>
+</div>
+</div>
+</label>
+<label class="relative cursor-pointer">
+<input class="peer absolute h-0 w-0 opacity-0" name="learning_style" type="radio"/>
+<div class="flex items-center gap-4 rounded-xl border border-solid border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 p-4 transition-all duration-200">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">hearing</span>
+</div>
+<div class="flex-grow">
+<p class="text-slate-800 dark:text-white text-base font-medium leading-normal">Auditory</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">I learn well by listening to lectures, discussions, and audio.</p>
+</div>
+<div class="radio-circle flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 dark:border-slate-600 transition-all duration-200">
+<div class="radio-dot h-2.5 w-2.5 rounded-full bg-[#2DE2E6] scale-0 transition-transform duration-200"></div>
+</div>
+</div>
+</label>
+<label class="relative cursor-pointer">
+<input class="peer absolute h-0 w-0 opacity-0" name="learning_style" type="radio"/>
+<div class="flex items-center gap-4 rounded-xl border border-solid border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 p-4 transition-all duration-200">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">touch_app</span>
+</div>
+<div class="flex-grow">
+<p class="text-slate-800 dark:text-white text-base font-medium leading-normal">Kinesthetic</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">I prefer to learn by doing, practicing, and hands-on activities.</p>
+</div>
+<div class="radio-circle flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 dark:border-slate-600 transition-all duration-200">
+<div class="radio-dot h-2.5 w-2.5 rounded-full bg-[#2DE2E6] scale-0 transition-transform duration-200"></div>
+</div>
+</div>
+</label>
+<label class="relative cursor-pointer">
+<input class="peer absolute h-0 w-0 opacity-0" name="learning_style" type="radio"/>
+<div class="flex items-center gap-4 rounded-xl border border-solid border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 p-4 transition-all duration-200">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+<div class="flex-grow">
+<p class="text-slate-800 dark:text-white text-base font-medium leading-normal">Reading &amp; Writing</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">I absorb information best by reading texts and taking detailed notes.</p>
+</div>
+<div class="radio-circle flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 dark:border-slate-600 transition-all duration-200">
+<div class="radio-dot h-2.5 w-2.5 rounded-full bg-[#2DE2E6] scale-0 transition-transform duration-200"></div>
+</div>
+</div>
+</label>
+</div>
+</div>
+<!-- Footer Button -->
+<div class="sticky bottom-0 bg-background-light dark:bg-background-dark p-5 pt-3">
+<button class="flex w-full items-center justify-center rounded-xl bg-primary px-6 py-4 text-center text-base font-bold text-white shadow-sm">Next</button>
+</div>
+</div>
+</body></html>

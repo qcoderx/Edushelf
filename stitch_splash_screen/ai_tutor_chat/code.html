@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Tutor Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "ai-bubble": "#7F2AF0",
+              "user-bubble": "#2DE2E6",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-hidden">
+<header class="flex shrink-0 items-center border-b border-white/10 bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<button class="flex size-12 items-center justify-start text-black dark:text-white">
+<span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+</button>
+<h1 class="text-black dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Physics Tutor</h1>
+<button class="flex size-12 items-center justify-end text-black dark:text-white">
+<span class="material-symbols-outlined text-2xl">more_vert</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto p-4 space-y-6">
+<div class="flex items-end gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0" data-alt="Physics Tutor AI avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAAjf5KJkiExSf2lm96HlRnJh-mNkH1BVQsHgapZMQqkHA8GLdLd-BzfQYOYd3xD57QOg5fwY3euT9hjof9Qtz3MnyW4Quxc0tJH4RxzGnGKN4EPjtAOKFGaHmjzJUZH_4kVWsLnL_PGzvWaWKkrO7oVw2HQFiF1S-8HZa7Z4Hjn6tmP4ciC5Cwsu7M4iHQ0ApWmc7i2d7Qgw2tyxQAHEtLhmmtAvfJRpvpZGiHLfg1Aq_WEd20tSPCkgsS_seEqj_oewQ18Mfrsjo");'></div>
+<div class="flex flex-1 flex-col gap-1 items-start">
+<p class="text-slate-500 dark:text-[#9dabb9] text-[13px] font-normal leading-normal max-w-[360px]">Physics Tutor</p>
+<div class="text-base font-normal leading-normal flex max-w-[360px] rounded-xl rounded-bl-sm px-4 py-3 bg-ai-bubble text-white">
+<p>Hello! I'm your Physics tutor. Ask me about Newton's laws or request a past WAEC question.</p>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-3 justify-end">
+<div class="flex flex-1 flex-col gap-1 items-end">
+<p class="text-slate-500 dark:text-[#9dabb9] text-[13px] font-normal leading-normal max-w-[360px] text-right">You</p>
+<div class="text-base font-normal leading-normal flex max-w-[360px] rounded-xl rounded-br-sm px-4 py-3 bg-user-bubble text-black">
+<p>Can you give me a JAMB question on electricity?</p>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0" data-alt="Physics Tutor AI avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAwLlrUyq-erQ6Z9NllcEZBG_PHZiYkZcVMPBFO-gBNkQ4LodY3mB89Qz5JzRav1yKgPdzv9Oc4vu0wT_0F1rhDlvvw9iqXI1SGFRljp6XeaFEZxpBm-k818wJUkU0BeD6DjfXXZ9darV1_l_2jodhNq5SgmfPeLT1BNxlp5nnvofNssgcVuVaMezLU-YMGCJDLeuR3F9KWCo4x7yIdWkVLUKb7ciHxpXTmpOeFAPyR2b_FseA0Kqbch0bXCM-rZlaU7I710dYr6EA");'></div>
+<div class="flex flex-1 flex-col gap-1 items-start">
+<div class="text-base font-normal leading-normal flex max-w-[360px] rounded-xl rounded-bl-sm px-4 py-3 bg-ai-bubble text-white">
+<div class="flex items-center gap-1.5">
+<span class="size-2 bg-white/60 rounded-full animate-[pulse_1s_cubic-bezier(0.4,0,0.6,1)_infinite]"></span>
+<span class="size-2 bg-white/60 rounded-full animate-[pulse_1s_cubic-bezier(0.4,0,0.6,1)_0.2s_infinite]"></span>
+<span class="size-2 bg-white/60 rounded-full animate-[pulse_1s_cubic-bezier(0.4,0,0.6,1)_0.4s_infinite]"></span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0" data-alt="Physics Tutor AI avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuASbml5f-ywMy-G6PJz8J0PI9fPwiV53LjKoqg9Win20cbHby7OM_-T800Wh07OoW6O2S8qAA8AgOItgQimEHbMvtnRuSpNKW8tjEci6a4zUtAiXqi5o0YND6x55xIB9DHCfKQgWRNAvZ4snFHulbqFqy0Cfq-Pf7VhlhPk4ka13J6zb9wNhlK6X7lK-GhHwcvlrTn156iyoLIQVDztfMiGXr4LFErLoNigczYU3wTwnUmv1o8Hl_w9mNH3lMW3-zyRyO0e6IQN7mg");'></div>
+<div class="flex flex-1 flex-col gap-2 items-start">
+<p class="text-slate-500 dark:text-[#9dabb9] text-[13px] font-normal leading-normal max-w-[360px]">Physics Tutor</p>
+<div class="text-base font-normal leading-normal flex max-w-[360px] rounded-xl rounded-bl-sm px-4 py-3 bg-ai-bubble text-white">
+<p>Of course! Here is a past question on electricity:</p>
+</div>
+<div class="flex flex-col items-stretch justify-start rounded-xl w-full max-w-md shadow-sm bg-slate-200 dark:bg-[#1c2127]">
+<div class="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-2 p-4">
+<p class="text-black dark:text-white text-base font-bold leading-tight tracking-[-0.015em]">Which of the following is a fundamental unit of electricity?</p>
+<div class="flex flex-col items-start gap-2.5">
+<p class="text-slate-600 dark:text-[#9dabb9] text-base font-normal leading-normal">A) Volt<br/>B) Ampere<br/>C) Ohm<br/>D) Watt</p>
+<button class="flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-user-bubble text-black text-sm font-medium leading-normal">
+<span class="truncate">Show Explanation</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-3 justify-end">
+<div class="flex flex-1 flex-col gap-1 items-end">
+<p class="text-slate-500 dark:text-[#9dabb9] text-[13px] font-normal leading-normal max-w-[360px] text-right">You</p>
+<div class="text-base font-normal leading-normal flex max-w-[360px] rounded-xl rounded-br-sm px-4 py-3 bg-user-bubble text-black">
+<p>Explain Newton's second law with a car analogy.</p>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0" data-alt="Physics Tutor AI avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC30Ca4AbEFi0MJh7FJNM1EBDxHzmfhwL-8dpMI4m29nwTkH0zVFpWxpsaszT2kiHVFaRBwgXgNAMQxaDMtw_Yuk1uVgAxcRFyx5LpVBLlvJZseHPw6HHAPZyWLKjBN0m5_CwoiNp1nfcTSohH-qBKww5tC9f6xlXDM8szLT1qQeGIpdSoK27VJDe6yk0bBimgWb1BW4vMnIz5bSYwxM6QJIXqF_uTUW1tOC3-2e9xK7lA8ZYVldEbIMWQVRK-0hatZmeh8xTdAbqg");'></div>
+<div class="flex flex-1 flex-col gap-1 items-start">
+<p class="text-slate-500 dark:text-[#9dabb9] text-[13px] font-normal leading-normal max-w-[360px]">Physics Tutor</p>
+<div class="text-base font-normal leading-normal flex max-w-[360px] rounded-xl rounded-bl-sm px-4 py-3 bg-ai-bubble text-white">
+<p>Great question! Imagine you're pushing a car. Pushing a small car (less mass) is easier to get moving (accelerate) than a big truck (more mass). That's Newton's second law in action. The force you apply is related to the car's mass and its acceleration. The formula is: <br/><br/> <span class="font-mono text-center block text-lg text-user-bubble">F = ma</span></p>
+</div>
+</div>
+</div>
+</main>
+<footer class="flex shrink-0 items-center gap-2 border-t border-white/10 bg-background-light dark:bg-background-dark p-4 sticky bottom-0">
+<button class="flex size-12 items-center justify-center rounded-full text-black dark:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-2xl">add_circle</span>
+</button>
+<div class="relative flex-1">
+<input class="w-full h-12 rounded-full border-slate-300 dark:border-slate-700 bg-slate-200 dark:bg-[#283039] px-5 pr-14 text-black dark:text-white placeholder:text-slate-500 focus:ring-2 focus:ring-user-bubble focus:border-user-bubble transition-all" placeholder="Ask me anything about Physics..." type="text"/>
+<button class="absolute right-1 top-1 flex size-10 items-center justify-center rounded-full bg-user-bubble text-black">
+<span class="material-symbols-outlined text-2xl">send</span>
+</button>
+</div>
+</footer>
+</div>
+
+</body></html>

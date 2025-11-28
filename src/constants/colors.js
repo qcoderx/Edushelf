@@ -1,0 +1,16 @@
+export const colors = {
+  primary: '#137fec',
+  backgroundLight: '#f6f7f8',
+  backgroundDark: '#101922',
+  aiBubble: '#7F2AF0',
+  userBubble: '#2DE2E6',
+  white: '#ffffff',
+  black: '#000000',
+  slate500: '#64748b',
+  slate600: '#475569',
+  slate200: '#e2e8f0',
+  slate300: '#cbd5e1',
+  slate700: '#334155',
+  cardDark: '#1c2127',
+  inputDark: '#283039',
+};

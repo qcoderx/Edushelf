@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Exercise Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#2DE2E6",
+            "accent": "#7F2AF0",
+            "background-light": "#f6f8f8",
+            "background-dark": "#112121",
+          },
+          fontFamily: {
+            "display": ["Lexend", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<div class="flex items-center p-4 pb-2 justify-between bg-background-light dark:bg-background-dark">
+<button class="text-slate-800 dark:text-white flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<h1 class="text-slate-800 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Physics - Practice Set 1</h1>
+<div class="size-12 shrink-0"></div>
+</div>
+<div class="flex flex-col gap-2 p-4 pt-0">
+<div class="flex gap-6 justify-between">
+<p class="text-accent text-sm font-medium leading-normal">Question 5 of 20</p>
+</div>
+<div class="rounded bg-slate-200 dark:bg-slate-700">
+<div class="h-2 rounded bg-accent" style="width: 25%;"></div>
+</div>
+</div>
+<div class="flex-grow p-4">
+<h2 class="text-slate-800 dark:text-white tracking-light text-[28px] font-bold leading-tight text-left pb-1">Question 5</h2>
+<p class="text-slate-600 dark:text-slate-300 text-base font-normal leading-normal pb-6">
+        In a series R-L-C circuit, the voltage across the resistor and the inductor are 20V and 40V respectively. What is the voltage across the capacitor if the source voltage is 50V?
+      </p>
+<div class="flex flex-col gap-3">
+<label class="flex items-center gap-4 rounded-xl p-4 transition-all border border-solid border-slate-200 dark:border-slate-700 has-[:checked]:border-accent has-[:checked]:bg-primary/10 has-[:checked]:ring-2 has-[:checked]:ring-accent">
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-slate-300 dark:border-slate-600 bg-transparent checked:bg-primary checked:border-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="question_options" type="radio"/>
+<div class="flex grow flex-col"><p class="text-slate-800 dark:text-white text-base font-medium leading-normal">A. 10V</p></div>
+</label>
+<label class="flex items-center gap-4 rounded-xl p-4 transition-all border border-solid border-slate-200 dark:border-slate-700 has-[:checked]:border-accent has-[:checked]:bg-primary/10 has-[:checked]:ring-2 has-[:checked]:ring-accent">
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-slate-300 dark:border-slate-600 bg-transparent checked:bg-primary checked:border-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="question_options" type="radio"/>
+<div class="flex grow flex-col"><p class="text-slate-800 dark:text-white text-base font-medium leading-normal">B. 20V</p></div>
+</label>
+<label class="flex items-center gap-4 rounded-xl p-4 transition-all border border-solid border-slate-200 dark:border-slate-700 has-[:checked]:border-accent has-[:checked]:bg-primary/10 has-[:checked]:ring-2 has-[:checked]:ring-accent">
+<input checked="" class="h-5 w-5 appearance-none rounded-full border-2 border-slate-300 dark:border-slate-600 bg-transparent checked:bg-primary checked:border-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="question_options" type="radio"/>
+<div class="flex grow flex-col"><p class="text-slate-800 dark:text-white text-base font-medium leading-normal">C. 30V</p></div>
+</label>
+<label class="flex items-center gap-4 rounded-xl p-4 transition-all border border-solid border-slate-200 dark:border-slate-700 has-[:checked]:border-accent has-[:checked]:bg-primary/10 has-[:checked]:ring-2 has-[:checked]:ring-accent">
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-slate-300 dark:border-slate-600 bg-transparent checked:bg-primary checked:border-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="question_options" type="radio"/>
+<div class="flex grow flex-col"><p class="text-slate-800 dark:text-white text-base font-medium leading-normal">D. 40V</p></div>
+</label>
+</div>
+</div>
+<div class="sticky bottom-0 w-full bg-background-light dark:bg-background-dark p-4 pt-2">
+<button class="w-full rounded-xl bg-primary py-4 px-5 text-center text-base font-bold text-slate-900 transition-transform duration-200 active:scale-95">
+                Submit Answer
+            </button>
+</div>
+</div>
+
+</body></html>

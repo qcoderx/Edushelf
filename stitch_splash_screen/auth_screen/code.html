@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auth Screen - Lumina</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-button": "#2DE2E6",
+            "accent": "#7F2AF0",
+            "primary": "#137fec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col items-center bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="flex flex-col items-center justify-center p-4 w-full max-w-md mx-auto">
+<div class="pt-16 pb-6 text-center">
+<h1 class="text-zinc-900 dark:text-white tracking-tight text-4xl font-bold leading-tight font-display">Lumina</h1>
+<p class="text-zinc-600 dark:text-zinc-400 text-base font-normal leading-normal pt-2">Your Personalized Path to Success</p>
+</div>
+<div class="flex px-4 py-3 w-full">
+<div class="flex h-12 flex-1 items-center justify-center rounded-xl bg-zinc-200 dark:bg-zinc-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white has-[:checked]:dark:bg-zinc-900 has-[:checked]:shadow-sm has-[:checked]:text-zinc-900 has-[:checked]:dark:text-white text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-normal transition-all duration-200">
+<span class="truncate">Login</span>
+<input checked="" class="invisible w-0" name="auth-toggle" type="radio" value="Login"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white has-[:checked]:dark:bg-zinc-900 has-[:checked]:shadow-sm has-[:checked]:text-zinc-900 has-[:checked]:dark:text-white text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-normal transition-all duration-200">
+<span class="truncate">Register</span>
+<input class="invisible w-0" name="auth-toggle" type="radio" value="Register"/>
+</label>
+</div>
+</div>
+<div class="flex w-full max-w-[480px] flex-col gap-4 px-4 py-3">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-zinc-900 dark:text-white text-base font-medium leading-normal pb-2">Email</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-zinc-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-accent/50 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 h-14 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 p-4 text-base font-normal leading-normal" placeholder="Enter your email" type="email" value=""/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-zinc-900 dark:text-white text-base font-medium leading-normal pb-2">Password</p>
+<div class="relative flex w-full flex-1 items-stretch">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-zinc-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-accent/50 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 h-14 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 p-4 pr-12 text-base font-normal leading-normal" placeholder="Enter your password" type="password" value=""/>
+<button aria-label="Toggle password visibility" class="text-zinc-500 dark:text-zinc-400 absolute right-0 top-0 flex h-full items-center justify-center px-4">
+<span class="material-symbols-outlined text-2xl">visibility</span>
+</button>
+</div>
+</label>
+<div class="flex justify-end pt-1">
+<a class="text-accent text-sm font-medium hover:underline" href="#">Forgot Password?</a>
+</div>
+</div>
+<div class="flex flex-col gap-4 px-4 py-4 w-full">
+<button class="flex items-center justify-center rounded-xl bg-primary-button h-14 text-black font-bold text-base leading-normal w-full shadow-sm hover:opacity-90">Login</button>
+</div>
+<div class="flex items-center justify-center gap-4 px-4 py-4 w-full">
+<div class="h-px flex-1 bg-zinc-200 dark:bg-zinc-700"></div>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium">OR</p>
+<div class="h-px flex-1 bg-zinc-200 dark:bg-zinc-700"></div>
+</div>
+<div class="flex flex-col gap-4 px-4 py-4 w-full">
+<button class="flex items-center justify-center gap-3 rounded-xl bg-primary-button h-14 text-black font-bold text-base leading-normal w-full shadow-sm hover:opacity-90">
+<img alt="Google logo" class="h-6 w-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlW7TzBMpxS7MbJb6hZ2e1mvVrr0bTv5XVijXi4ZUaRXHpKnNLE2sE-1XpTIxPIO4k4wzlG1XxwQsW2LdiMP45gimvs2lClCXOQgwhmJgaim8203u8Gh_dnzYu1u0O5V15ET1hgMwRI4y8yWNXMlF7iURl8bSt11MMxhX_B0Vx0UbOorGDWX36dUFhSEW0pPghvF6rurGsYHuc00BHT-GhP82KQBZ1QeAndTbabKaM6FNWqeIsVbwKGwGUZuAzT1XXLz9ucj_ZrWo"/>
+<span>Continue with Google</span>
+</button>
+<button class="flex items-center justify-center gap-3 rounded-xl bg-primary-button h-14 text-black font-bold text-base leading-normal w-full shadow-sm hover:opacity-90">
+<img alt="Facebook logo" class="h-6 w-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk0KvfZzeAU3sR-7zFUTBPW20GiYjgjW5yPg_hb660jVuhpkfZl3KqEQ-zDDzf2pCbY5HrTftXHZcelTJoIMxYaEoJA-QSbDmtPtLToeG6BrPxRxVU_tDJC7z_TC9vWziRpGhDqOuq_v2mWvwaElqK7N4icrtdSZc7NDJbF5UTXS307WxomnGk4vUNtUltDTYX-I8QAeLwPnAQ46b_l7tHV6wwUL1Bi78VU1SWcRDU5BhOg3GrSDXo_udIfhfXkzHYazEDW6OXuCs"/>
+<span>Continue with Facebook</span>
+</button>
+</div>
+<div class="px-4 py-6 text-center">
+<p class="text-zinc-500 dark:text-zinc-400 text-xs">
+          By continuing, you agree to Lumina's
+          <a class="font-medium text-accent hover:underline" href="#">Terms of Service</a> and
+          <a class="font-medium text-accent hover:underline" href="#">Privacy Policy</a>.
+        </p>
+</div>
+</div>
+</div>
+
+</body></html>

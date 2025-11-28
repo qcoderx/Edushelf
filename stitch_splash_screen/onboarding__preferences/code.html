@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding: Preferences</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom styles for the range slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            background: #474747; /* Fallback for browsers that don't support dark mode vars well in CSS */
+            background-color: var(--slider-track-bg, #474747);
+            border-radius: 9999px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+
+        .dark input[type="range"] {
+            background-color: #474747;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #2de3e6;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #112121;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #2de3e6;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #112121;
+        }
+    </style>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#2de3e6",
+              "background-light": "#f6f8f8",
+              "background-dark": "#112121",
+              "accent": "#7F2AF0"
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col">
+<div class="flex-grow p-4 space-y-6 pb-28">
+<!-- Progress Bar -->
+<div class="flex flex-col gap-2 pt-2">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-zinc-900 dark:text-white text-base font-medium leading-normal">Final Step</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal leading-normal">4/4</p>
+</div>
+<div class="rounded-full bg-zinc-200 dark:bg-zinc-700 h-2">
+<div class="h-2 rounded-full bg-accent" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Header -->
+<div>
+<h1 class="text-zinc-900 dark:text-white tracking-tight text-[32px] font-bold leading-tight pt-4">Learning Preferences</h1>
+<p class="text-zinc-600 dark:text-zinc-400 text-base font-normal leading-normal pt-1">Set your preferences to create a personalized plan just for you.</p>
+</div>
+<!-- Study Times Section -->
+<div class="bg-white dark:bg-zinc-900/50 p-4 rounded-xl space-y-4 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-zinc-500 dark:text-zinc-400" data-icon="schedule">schedule</span>
+<h3 class="text-zinc-900 dark:text-white text-lg font-bold leading-tight">When do you study best?</h3>
+</div>
+<div class="flex">
+<div class="flex h-11 flex-1 items-center justify-center rounded-lg bg-zinc-100 dark:bg-black/20 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-primary has-[:checked]:text-black text-zinc-600 dark:text-zinc-300 has-[:checked]:dark:text-black text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Morning</span>
+<input class="invisible w-0" name="study_time" type="radio" value="Morning"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-primary has-[:checked]:text-black text-zinc-600 dark:text-zinc-300 has-[:checked]:dark:text-black text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Afternoon</span>
+<input checked="" class="invisible w-0" name="study_time" type="radio" value="Afternoon"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-primary has-[:checked]:text-black text-zinc-600 dark:text-zinc-300 has-[:checked]:dark:text-black text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Evening</span>
+<input class="invisible w-0" name="study_time" type="radio" value="Evening"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Attention Span Section -->
+<div class="bg-white dark:bg-zinc-900/50 p-4 rounded-xl space-y-4 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-zinc-500 dark:text-zinc-400" data-icon="hourglass_top">hourglass_top</span>
+<h3 class="text-zinc-900 dark:text-white text-lg font-bold leading-tight">Typical study session length?</h3>
+</div>
+<div class="space-y-3 pt-2">
+<div class="text-center text-zinc-900 dark:text-white font-bold text-xl">
+<span>45</span> min
+                    </div>
+<input class="w-full h-1 rounded-full cursor-pointer" max="90" min="15" step="15" type="range" value="45"/>
+<div class="flex justify-between text-xs text-zinc-500 dark:text-zinc-400">
+<span>15 min</span>
+<span>90 min</span>
+</div>
+</div>
+</div>
+<!-- Study Environment Section -->
+<div class="bg-white dark:bg-zinc-900/50 p-4 rounded-xl space-y-4 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-zinc-500 dark:text-zinc-400" data-icon="headphones">headphones</span>
+<h3 class="text-zinc-900 dark:text-white text-lg font-bold leading-tight">What's your ideal environment?</h3>
+</div>
+<div class="flex flex-wrap gap-2">
+<label class="cursor-pointer">
+<input class="peer sr-only" name="environment" type="checkbox" value="quiet"/>
+<div class="px-4 py-2 rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-sm font-medium peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-colors">Quiet Place</div>
+</label>
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="environment" type="checkbox" value="music"/>
+<div class="px-4 py-2 rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-sm font-medium peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-colors">With Music</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="environment" type="checkbox" value="group"/>
+<div class="px-4 py-2 rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-sm font-medium peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-colors">Group Study</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="environment" type="checkbox" value="cafe"/>
+<div class="px-4 py-2 rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-sm font-medium peer-checked:bg-primary peer-checked:text-black peer-checked:border-primary transition-colors">Cafe</div>
+</label>
+</div>
+</div>
+<!-- Subject Proficiency Section -->
+<div class="bg-white dark:bg-zinc-900/50 p-4 rounded-xl space-y-4 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-zinc-500 dark:text-zinc-400" data-icon="school">school</span>
+<h3 class="text-zinc-900 dark:text-white text-lg font-bold leading-tight">Rate your confidence in each subject</h3>
+</div>
+<div class="space-y-4">
+<!-- Subject Item -->
+<div class="flex items-center justify-between">
+<p class="text-zinc-900 dark:text-white font-medium">Mathematics</p>
+<div class="flex items-center gap-1.5">
+<input checked="" class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="math_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="math_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="math_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="math_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="math_rating" type="radio"/>
+</div>
+</div>
+<!-- Subject Item -->
+<div class="flex items-center justify-between">
+<p class="text-zinc-900 dark:text-white font-medium">English</p>
+<div class="flex items-center gap-1.5">
+<input checked="" class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="english_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="english_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="english_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="english_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="english_rating" type="radio"/>
+</div>
+</div>
+<!-- Subject Item -->
+<div class="flex items-center justify-between">
+<p class="text-zinc-900 dark:text-white font-medium">Physics</p>
+<div class="flex items-center gap-1.5">
+<input checked="" class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="physics_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="physics_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="physics_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="physics_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="physics_rating" type="radio"/>
+</div>
+</div>
+<!-- Subject Item -->
+<div class="flex items-center justify-between">
+<p class="text-zinc-900 dark:text-white font-medium">Chemistry</p>
+<div class="flex items-center gap-1.5">
+<input checked="" class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary checked:border-primary focus:outline-none transition-colors" name="chemistry_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="chemistry_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="chemistry_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="chemistry_rating" type="radio"/>
+<input class="h-5 w-5 appearance-none rounded-full border-2 border-zinc-300 dark:border-zinc-600 checked:bg-primary/30 checked:border-primary/30 focus:outline-none transition-colors" name="chemistry_rating" type="radio"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA Button -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<button class="w-full h-12 flex items-center justify-center bg-accent text-white font-bold text-base rounded-xl hover:bg-accent/90 transition-colors">
+                Create My Plan
+            </button>
+</div>
+</div>
+</body></html>

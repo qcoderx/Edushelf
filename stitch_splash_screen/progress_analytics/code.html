@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Progress Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#2de3e6",
+              "accent": "#7F2AF0",
+              "background-light": "#f6f8f8",
+              "background-dark": "#121212",
+              "card-light": "#ffffff",
+              "card-dark": "#1E1E1E",
+              "text-light-primary": "#121212",
+              "text-dark-primary": "#EAEAEA",
+              "text-light-secondary": "#6b7280",
+              "text-dark-secondary": "#9ca3af",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<h1 class="text-text-light-primary dark:text-text-dark-primary text-2xl font-bold leading-tight tracking-[-0.015em] flex-1">Progress Analytics</h1>
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-card-light dark:bg-card-dark">
+<img class="h-full w-full rounded-full object-cover" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD2lGsAO_7UxSlpVYjGa4U42L_GHwS-0_gkn9Ljzn7o0JbO8xkUy3fwKkWCo_28atC1onk8q2RaGRsrcSYBzpzwcMpDGALyrLwRVA_ErwpKI5991j36HubXhni2WEnQ08hJ7g5VQqyPVUzZ5NH6JX1gjyPYoHNII6m8yGxuUfJ7ylTaUHZxJUtEyd72eM114greMctIaOaXB8S3esDbh-kWgxI4mauIE04y7OmJlmI-n9w6QFP6FV3y4nmrwj9FvZnRUdZ_UtTruE"/>
+</div>
+</div>
+<!-- Gamification Stats -->
+<div class="flex flex-wrap gap-3 p-4">
+<div class="flex min-w-[100px] flex-1 flex-col gap-2 rounded-xl p-4 bg-card-light dark:bg-card-dark">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent text-xl">local_fire_department</span>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-sm font-medium leading-normal">Streak</p>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-light text-2xl font-bold leading-tight">15 Days</p>
+</div>
+<div class="flex min-w-[100px] flex-1 flex-col gap-2 rounded-xl p-4 bg-card-light dark:bg-card-dark">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent text-xl">star</span>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-sm font-medium leading-normal">Points</p>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-light text-2xl font-bold leading-tight">12,500</p>
+</div>
+<div class="flex min-w-[100px] flex-1 flex-col gap-2 rounded-xl p-4 bg-card-light dark:bg-card-dark">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent text-xl">trophy</span>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-sm font-medium leading-normal">Rank</p>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-light text-2xl font-bold leading-tight">#8</p>
+</div>
+</div>
+<!-- Overall Progress Chart -->
+<div class="flex flex-col gap-4 px-4 py-2">
+<div class="flex flex-1 flex-col gap-4 rounded-xl p-6 bg-card-light dark:bg-card-dark">
+<div class="flex items-center justify-between">
+<p class="text-text-light-primary dark:text-text-dark-primary text-lg font-bold leading-normal">Overall Progress</p>
+<div class="flex items-center gap-1 rounded-full bg-background-light dark:bg-background-dark p-1 text-sm">
+<button class="rounded-full px-3 py-1 text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary">7D</button>
+<button class="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">30D</button>
+<button class="rounded-full px-3 py-1 text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary">All</button>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-tight text-4xl font-bold leading-tight">78%</p>
+<p class="text-green-500 text-base font-medium leading-normal">+5.2%</p>
+</div>
+<div class="flex h-[180px] flex-1 flex-col">
+<svg fill="none" height="100%" preserveaspectratio="none" viewbox="0 0 475 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.2692 109 18.2692 21 36.5385 21C54.8077 21 54.8077 41 73.0769 41C91.3462 41 91.3462 93 109.615 93C127.885 93 127.885 33 146.154 33C164.423 33 164.423 101 182.692 101C200.962 101 200.962 61 219.231 61C237.5 61 237.5 45 255.769 45C274.038 45 274.038 121 292.308 121C310.577 121 310.577 149 328.846 149C347.115 149 347.115 1 365.385 1C383.654 1 383.654 81 401.923 81C420.192 81 420.192 129 438.462 129C456.731 129 456.731 25 475 25V149H0V109Z" fill="url(#paint0_linear_progress)"></path>
+<path d="M0 109C18.2692 109 18.2692 21 36.5385 21C54.8077 21 54.8077 41 73.0769 41C91.3462 41 91.3462 93 109.615 93C127.885 93 127.885 33 146.154 33C164.423 33 164.423 101 182.692 101C200.962 101 200.962 61 219.231 61C237.5 61 237.5 45 255.769 45C274.038 45 274.038 121 292.308 121C310.577 121 310.577 149 328.846 149C347.115 149 347.115 1 365.385 1C383.654 1 383.654 81 401.923 81C420.192 81 420.192 129 438.462 129C456.731 129 456.731 25 475 25" stroke="#2DE2E6" stroke-linecap="round" stroke-width="3"></path>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="paint0_linear_progress" x1="237.5" x2="237.5" y1="1" y2="149">
+<stop stop-color="#2DE2E6" stop-opacity="0.3"></stop>
+<stop offset="1" stop-color="#2DE2E6" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</div>
+</div>
+<!-- Subject Mastery Chart -->
+<div class="flex flex-col gap-4 px-4 py-2">
+<div class="flex flex-1 flex-col gap-4 rounded-xl p-6 bg-card-light dark:bg-card-dark">
+<div class="flex items-center justify-between">
+<p class="text-text-light-primary dark:text-text-dark-primary text-lg font-bold leading-normal">Subject Mastery</p>
+</div>
+<div class="flex min-h-[220px] flex-1 items-center justify-center py-4">
+<div class="relative h-52 w-52">
+<svg class="absolute inset-0 h-full w-full" viewbox="0 0 100 100">
+<defs>
+<radialgradient cx="50%" cy="50%" id="radar-gradient" r="50%">
+<stop offset="0%" stop-color="#7F2AF0" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#7F2AF0" stop-opacity="0.05"></stop>
+</radialgradient>
+</defs>
+<polygon fill="url(#radar-gradient)" points="50,10 95,35 80,85 20,85 5,35" stroke="#2de3e6" stroke-width="0.3"></polygon>
+<!-- Grid lines -->
+<line stroke="#2de3e6" stroke-width="0.2" x1="50" x2="50" y1="50" y2="10"></line>
+<line stroke="#2de3e6" stroke-width="0.2" x1="50" x2="95" y1="50" y2="35"></line>
+<line stroke="#2de3e6" stroke-width="0.2" x1="50" x2="80" y1="50" y2="85"></line>
+<line stroke="#2de3e6" stroke-width="0.2" x1="50" x2="20" y1="50" y2="85"></line>
+<line stroke="#2de3e6" stroke-width="0.2" x1="50" x2="5" y1="50" y2="35"></line>
+<!-- Data polygon -->
+<polygon fill="#2de3e6" fill-opacity="0.3" points="50,20 85,38 70,75 30,75 15,38" stroke="#2de3e6" stroke-width="1.5"></polygon>
+</svg>
+<span class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-full transform text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary">Math</span>
+<span class="absolute right-0 top-[25%] translate-x-[90%] -translate-y-1/2 transform text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary">English</span>
+<span class="absolute bottom-[5%] right-[10%] translate-x-1/2 translate-y-full transform text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary">Physics</span>
+<span class="absolute bottom-[5%] left-[10%] -translate-x-1/2 translate-y-full transform text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary">Chemistry</span>
+<span class="absolute left-0 top-[25%] -translate-x-[90%] -translate-y-1/2 transform text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary">Biology</span>
+</div>
+</div>
+</div>
+</div>
+<!-- My Badges Section -->
+<div class="flex flex-col gap-3 py-4">
+<h3 class="text-text-light-primary dark:text-text-dark-primary text-lg font-bold leading-tight tracking-[-0.015em] px-4">My Badges</h3>
+<div class="flex gap-4 overflow-x-auto px-4 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+<div class="flex w-24 flex-none flex-col items-center gap-2 text-center">
+<div class="flex h-20 w-20 items-center justify-center rounded-full bg-accent/20 p-2">
+<span class="material-symbols-outlined text-accent text-5xl">military_tech</span>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-semibold">Topic Master</p>
+</div>
+<div class="flex w-24 flex-none flex-col items-center gap-2 text-center">
+<div class="flex h-20 w-20 items-center justify-center rounded-full bg-accent/20 p-2">
+<span class="material-symbols-outlined text-accent text-5xl">verified</span>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-semibold">Perfect Score</p>
+</div>
+<div class="flex w-24 flex-none flex-col items-center gap-2 text-center">
+<div class="flex h-20 w-20 items-center justify-center rounded-full bg-accent/20 p-2">
+<span class="material-symbols-outlined text-accent text-5xl">calendar_month</span>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-semibold">10-Day Streak</p>
+</div>
+<div class="flex w-24 flex-none flex-col items-center gap-2 text-center opacity-40">
+<div class="flex h-20 w-20 items-center justify-center rounded-full bg-card-light dark:bg-card-dark p-2">
+<span class="material-symbols-outlined text-text-light-secondary dark:text-text-dark-secondary text-5xl">school</span>
+</div>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-sm font-semibold">Subject Pro</p>
+</div>
+<div class="flex w-24 flex-none flex-col items-center gap-2 text-center opacity-40">
+<div class="flex h-20 w-20 items-center justify-center rounded-full bg-card-light dark:bg-card-dark p-2">
+<span class="material-symbols-outlined text-text-light-secondary dark:text-text-dark-secondary text-5xl">rocket_launch</span>
+</div>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-sm font-semibold">Quick Learner</p>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="sticky bottom-0 mt-auto flex justify-around border-t border-card-light/10 dark:border-card-dark/50 bg-background-light/80 dark:bg-background-dark/80 p-2 backdrop-blur-sm">
+<div class="flex flex-col items-center gap-1 p-2">
+<span class="material-symbols-outlined text-text-light-secondary dark:text-text-dark-secondary">home</span>
+<p class="text-xs font-medium text-text-light-secondary dark:text-text-dark-secondary">Home</p>
+</div>
+<div class="flex flex-col items-center gap-1 p-2">
+<span class="material-symbols-outlined text-text-light-secondary dark:text-text-dark-secondary">exercise</span>
+<p class="text-xs font-medium text-text-light-secondary dark:text-text-dark-secondary">Practice</p>
+</div>
+<div class="flex flex-col items-center gap-1 p-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<p class="text-xs font-bold text-primary">Analytics</p>
+</div>
+<div class="flex flex-col items-center gap-1 p-2">
+<span class="material-symbols-outlined text-text-light-secondary dark:text-text-dark-secondary">person</span>
+<p class="text-xs font-medium text-text-light-secondary dark:text-text-dark-secondary">Profile</p>
+</div>
+</div>
+</div>
+</body></html>
