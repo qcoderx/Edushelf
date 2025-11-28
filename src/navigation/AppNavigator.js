@@ -18,6 +18,11 @@ import ContentGeneratorScreen from '../screens/ContentGeneratorScreen';
 import ExerciseInterfaceScreen from '../screens/ExerciseInterfaceScreen';
 import LessonViewScreen from '../screens/LessonViewScreen';
 import ExerciseResultsScreen from '../screens/ExerciseResultsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import SmartScheduleScreen from '../screens/SmartScheduleScreen';
+import ProgressAnalyticsScreen from '../screens/ProgressAnalyticsScreen';
+import DigitalNotebookScreen from '../screens/DigitalNotebookScreen';
+import LeaderboardScreen from '../screens/LeaderboardScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -71,7 +76,7 @@ const MainTabs = () => (
     <Tab.Screen name="Dashboard" component={DashboardScreen} />
     <Tab.Screen name="Practice" component={ExerciseInterfaceScreen} />
     <Tab.Screen name="Subjects" component={DashboardScreen} />
-    <Tab.Screen name="Profile" component={DashboardScreen} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
 
@@ -87,6 +92,10 @@ const AppNavigator = () => (
       <Stack.Screen name="ExerciseInterface" component={ExerciseInterfaceScreen} />
       <Stack.Screen name="LessonView" component={LessonViewScreen} />
       <Stack.Screen name="ExerciseResults" component={ExerciseResultsScreen} />
+      <Stack.Screen name="SmartSchedule" component={SmartScheduleScreen} />
+      <Stack.Screen name="ProgressAnalytics" component={ProgressAnalyticsScreen} />
+      <Stack.Screen name="DigitalNotebook" component={DigitalNotebookScreen} />
+      <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );

@@ -23,6 +23,12 @@
     },
     "updates": {
       "enabled": false
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "cli": {
+      "appVersionSource": "remote"
     }
   }
 }

@@ -9,6 +9,9 @@ const DashboardScreen = ({ navigation }) => {
     { id: 'content-generator', name: 'Content Generator', icon: 'create', screen: 'ContentGenerator' },
     { id: 'smart-scheduler', name: 'Smart Scheduler', icon: 'calendar', screen: 'SmartSchedule' },
     { id: 'practice-tests', name: 'Practice Tests', icon: 'help-circle', screen: 'ExerciseInterface' },
+    { id: 'progress-analytics', name: 'Progress Analytics', icon: 'analytics', screen: 'ProgressAnalytics' },
+    { id: 'digital-notebook', name: 'Digital Notebook', icon: 'book', screen: 'DigitalNotebook' },
+    { id: 'leaderboard', name: 'Leaderboard', icon: 'trophy', screen: 'Leaderboard' },
   ];
 
   const weeklyData = [
@@ -25,7 +28,7 @@ const DashboardScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.greeting}>Hello, Tunde!</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Ionicons name="person-circle" size={48} color={colors.white} />
         </TouchableOpacity>
       </View>
