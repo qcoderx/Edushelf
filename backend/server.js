@@ -525,6 +525,12 @@ app.get('/api-docs/swagger.json', (req, res) => {
   res.sendFile(__dirname + '/swagger.json');
 });
 
+// Serve openapi.json (same as swagger.json)
+app.get('/openapi.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.json(specs);
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
