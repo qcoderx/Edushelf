@@ -26,7 +26,7 @@ const OnboardingWizardScreen = ({ navigation }) => {
     // Save selected exam (use first selected exam as primary)
     const primaryExam = selectedExams[0];
     await AsyncStorage.setItem('selectedExam', primaryExam);
-    navigation.navigate('LearningStyle');
+    navigation.navigate('SubjectSelection');
   };
 
   return (

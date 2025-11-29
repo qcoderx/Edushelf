@@ -21,18 +21,19 @@ router.get('/profile', authenticateToken, async (req, res) => {
 });
 
 // Update user profile
-router.put('/profile', authenticateToken, [
-  body('name').optional().trim().isLength({ min: 1 }),
-  body('examFocus').optional().isIn(['JAMB', 'WAEC', 'POST-UTME', 'A-LEVELS']),
-  body('learningStyle').optional().isIn(['Visual', 'Auditory', 'Kinesthetic', 'Reading/Writing'])
-], async (req, res) => {
+router.put('/profile', authenticateToken, async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    const { name, examFocus, learningStyle, interests, studyPreferences } = req.body;
+    
+    // Validate examFocus if provided
+    if (examFocus && !['JAMB', 'WAEC', 'POST-UTME', 'A-LEVELS'].includes(examFocus)) {
+      return res.status(400).json({ error: 'Invalid exam focus' });
     }
-
-    const { name, examFocus, learningStyle, interests } = req.body;
+    
+    // Validate learningStyle if provided
+    if (learningStyle && !['Visual', 'Auditory', 'Kinesthetic', 'Reading/Writing'].includes(learningStyle)) {
+      return res.status(400).json({ error: 'Invalid learning style' });
+    }
     
     const result = await db.query(`
       UPDATE users 

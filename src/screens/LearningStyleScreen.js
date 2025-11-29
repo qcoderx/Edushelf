@@ -37,7 +37,7 @@ const LearningStyleScreen = ({ navigation }) => {
   const handleNext = async () => {
     // Save selected learning style
     await AsyncStorage.setItem('selectedLearningStyle', selectedStyle);
-    navigation.navigate('Interests');
+    navigation.navigate('LearningChallenges');
   };
 
   return (

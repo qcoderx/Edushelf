@@ -12,9 +12,12 @@ const PreferencesScreen = ({ navigation }) => {
 
   const handleFinish = async () => {
     try {
-      // Get stored onboarding data
+      // Get all stored onboarding data
       const examFocus = await AsyncStorage.getItem('selectedExam');
+      const subjects = await AsyncStorage.getItem('selectedSubjects');
       const learningStyle = await AsyncStorage.getItem('selectedLearningStyle');
+      const challenges = await AsyncStorage.getItem('selectedChallenges');
+      const motivationFactors = await AsyncStorage.getItem('selectedMotivationFactors');
       const interests = await AsyncStorage.getItem('selectedInterests');
       const token = await AsyncStorage.getItem('userToken');
       
@@ -22,19 +25,32 @@ const PreferencesScreen = ({ navigation }) => {
         ApiService.setToken(token);
         
         // Update user profile with all onboarding data
-        await ApiService.updateUserProfile({
-          examFocus,
-          learningStyle,
-          interests: interests ? JSON.parse(interests) : [],
-          studyPreferences: {
-            studyTime,
-            sessionLength,
-            environment
-          }
-        });
+        const profileData = {};
+        if (examFocus) profileData.examFocus = examFocus;
+        if (subjects) profileData.subjects = JSON.parse(subjects);
+        if (learningStyle) profileData.learningStyle = learningStyle;
+        if (challenges) profileData.learningChallenges = JSON.parse(challenges);
+        if (motivationFactors) profileData.motivationFactors = JSON.parse(motivationFactors);
+        if (interests) profileData.interests = JSON.parse(interests);
+        
+        // Add study preferences
+        profileData.studyPreferences = {
+          studyTime,
+          sessionLength,
+          environment
+        };
+        
+        await ApiService.updateUserProfile(profileData);
         
         // Clear temporary onboarding data
-        await AsyncStorage.multiRemove(['selectedExam', 'selectedLearningStyle', 'selectedInterests']);
+        await AsyncStorage.multiRemove([
+          'selectedExam', 
+          'selectedSubjects',
+          'selectedLearningStyle', 
+          'selectedChallenges',
+          'selectedMotivationFactors',
+          'selectedInterests'
+        ]);
       }
       
       navigation.replace('MainTabs');

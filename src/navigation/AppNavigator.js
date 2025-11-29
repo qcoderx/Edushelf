@@ -33,7 +33,10 @@ const Tab = createBottomTabNavigator();
 const OnboardingStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="OnboardingWizard" component={OnboardingWizardScreen} />
+    <Stack.Screen name="SubjectSelection" component={require('../screens/SubjectSelectionScreen').default} />
     <Stack.Screen name="LearningStyle" component={LearningStyleScreen} />
+    <Stack.Screen name="LearningChallenges" component={require('../screens/LearningChallengesScreen').default} />
+    <Stack.Screen name="MotivationFactors" component={require('../screens/MotivationFactorsScreen').default} />
     <Stack.Screen name="Interests" component={InterestsScreen} />
     <Stack.Screen name="Preferences" component={PreferencesScreen} />
   </Stack.Navigator>

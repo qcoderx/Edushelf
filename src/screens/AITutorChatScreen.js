@@ -16,12 +16,15 @@ import ChatBubble from '../components/ChatBubble';
 import QuestionCard from '../components/QuestionCard';
 import ApiService from '../services/api';
 
-const AITutorChatScreen = () => {
+const AITutorChatScreen = ({ route }) => {
   const [inputText, setInputText] = useState('');
+  const [selectedTutor, setSelectedTutor] = useState(route?.params?.tutor || 'JAMB');
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm your Physics tutor. Ask me about Newton's laws or request a past WAEC question.",
+      text: selectedTutor === 'JAMB' 
+        ? "Hello! I'm your JAMB tutor. Ask me about any subject or request past questions like 'Chemistry 2020 question 5'."
+        : "Hello! I'm your WAEC tutor. Ask me about any subject or request past questions like 'Physics 2019 question 10'.",
       isAI: true,
       avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAAjf5KJkiExSf2lm96HlRnJh-mNkH1BVQsHgapZMQqkHA8GLdLd-BzfQYOYd3xD57QOg5fwY3euT9hjof9Qtz3MnyW4Quxc0tJH4RxzGnGKN4EPjtAOKFGaHmjzJUZH_4kVWsLnL_PGzvWaWKkrO7oVw2HQFiF1S-8HZa7Z4Hjn6tmP4ciC5Cwsu7M4iHQ0ApWmc7i2d7Qgw2tyxQAHEtLhmmtAvfJRpvpZGiHLfg1Aq_WEd20tSPCkgsS_seEqj_oewQ18Mfrsjo'
     },
@@ -86,11 +89,26 @@ const AITutorChatScreen = () => {
     setMessages(prev => [...prev, typingMessage]);
     
     try {
-      const response = await ApiService.chatWithAI({
-        message: messageText,
-        subject: 'Physics',
-        context: 'WAEC preparation'
-      });
+      let response;
+      if (selectedTutor === 'JAMB') {
+        response = await ApiService.chatWithAI({
+          message: `As a JAMB tutor, help with: ${messageText}`,
+          subject: 'General',
+          context: 'JAMB preparation - Focus on UTME past questions and exam strategies'
+        });
+      } else if (selectedTutor === 'WAEC') {
+        response = await ApiService.chatWithAI({
+          message: `As a WAEC tutor, help with: ${messageText}`,
+          subject: 'General', 
+          context: 'WAEC preparation - Focus on SSCE past questions and exam strategies'
+        });
+      } else {
+        response = await ApiService.chatWithAI({
+          message: messageText,
+          subject: 'General',
+          context: `${selectedTutor} preparation`
+        });
+      }
       
       // Remove typing indicator and add AI response
       setMessages(prev => {
@@ -131,10 +149,35 @@ const AITutorChatScreen = () => {
           <TouchableOpacity style={styles.headerButton}>
             <Ionicons name="chevron-back" size={24} color={colors.white} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Physics Tutor</Text>
+          <Text style={styles.headerTitle}>{selectedTutor} Tutor</Text>
           <TouchableOpacity style={styles.headerButton}>
             <Ionicons name="ellipsis-vertical" size={24} color={colors.white} />
           </TouchableOpacity>
+        </View>
+
+        {/* Tutor Selector */}
+        <View style={styles.tutorSelector}>
+          {['JAMB', 'WAEC'].map((tutor) => (
+            <TouchableOpacity
+              key={tutor}
+              style={[styles.tutorButton, selectedTutor === tutor && styles.activeTutorButton]}
+              onPress={() => {
+                setSelectedTutor(tutor);
+                setMessages([{
+                  id: 1,
+                  text: tutor === 'JAMB' 
+                    ? "Hello! I'm your JAMB tutor. Ask me about any subject or request past questions like 'Chemistry 2020 question 5'."
+                    : "Hello! I'm your WAEC tutor. Ask me about any subject or request past questions like 'Physics 2019 question 10'.",
+                  isAI: true,
+                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAAjf5KJkiExSf2lm96HlRnJh-mNkH1BVQsHgapZMQqkHA8GLdLd-BzfQYOYd3xD57QOg5fwY3euT9hjof9Qtz3MnyW4Quxc0tJH4RxzGnGKN4EPjtAOKFGaHmjzJUZH_4kVWsLnL_PGzvWaWKkrO7oVw2HQFiF1S-8HZa7Z4Hjn6tmP4ciC5Cwsu7M4iHQ0ApWmc7i2d7Qgw2tyxQAHEtLhmmtAvfJRpvpZGiHLfg1Aq_WEd20tSPCkgsS_seEqj_oewQ18Mfrsjo'
+                }]);
+              }}
+            >
+              <Text style={[styles.tutorButtonText, selectedTutor === tutor && styles.activeTutorButtonText]}>
+                {tutor}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
         {/* Chat Messages */}
@@ -168,7 +211,7 @@ const AITutorChatScreen = () => {
           <View style={styles.inputWrapper}>
             <TextInput
               style={styles.textInput}
-              placeholder="Ask me anything about Physics..."
+              placeholder={`Ask me about ${selectedTutor} questions...`}
               placeholderTextColor={colors.slate500}
               value={inputText}
               onChangeText={setInputText}
@@ -218,6 +261,31 @@ const styles = StyleSheet.create({
   questionContainer: {
     paddingHorizontal: 68,
     marginTop: -8,
+  },
+  tutorSelector: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    gap: 8,
+  },
+  tutorButton: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: colors.cardDark,
+    alignItems: 'center',
+  },
+  activeTutorButton: {
+    backgroundColor: colors.primary,
+  },
+  tutorButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.white,
+  },
+  activeTutorButtonText: {
+    color: colors.black,
   },
   inputContainer: {
     flexDirection: 'row',

@@ -90,6 +90,22 @@ class ApiService {
       body: JSON.stringify(data),
     });
   }
+
+  // JAMB Tutor endpoint
+  async chatWithJAMBTutor(data) {
+    return this.request('/ai/jamb-tutor', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // WAEC Tutor endpoint
+  async chatWithWAECTutor(data) {
+    return this.request('/ai/waec-tutor', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
 }
 
 export default new ApiService();

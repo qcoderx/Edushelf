@@ -359,6 +359,168 @@ Keep response under 200 words and be encouraging.`;
   }
 });
 
+// JAMB Tutor endpoint
+router.post('/jamb-tutor', authenticateToken, [
+  body('question').trim().isLength({ min: 1 }),
+  body('userProfile').optional().isObject()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { question: userQuery, userProfile = {} } = req.body;
+    
+    // Parse user query to extract subject, year, and question number
+    const parsingPrompt = `Extract subject, year, and question number from: "${userQuery}". Return JSON with keys: "subject", "year", "questionNumber". Set null if missing.`;
+    
+    const parseResponse = await generateStructuredContent(parsingPrompt, 'json');
+    const { subject, year, questionNumber } = parseResponse || {};
+    
+    let response = '';
+    
+    if (subject && year && questionNumber) {
+      // Try to fetch from ALOC API (if available)
+      const apiUrl = `https://questions.aloc.com.ng/api/v2/m?subject=${subject}&year=${year}&type=utme`;
+      
+      try {
+        const apiResponse = await fetch(apiUrl, {
+          headers: {
+            'AccessToken': process.env.ALOC_API_TOKEN || '',
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (apiResponse.ok) {
+          const data = await apiResponse.json();
+          const questions = data.data || [];
+          const questionIndex = parseInt(questionNumber) - 1;
+          
+          if (questions[questionIndex]) {
+            const q = questions[questionIndex];
+            const options = Object.entries(q.option || {})
+              .map(([key, value]) => `${key.toUpperCase()}. ${value || ''}`)
+              .join('\n');
+            
+            const tutorPrompt = `You are a JAMB tutor. Help with this past question:
+
+Question: ${q.question}
+Options:
+${options}
+Correct Answer: ${q.answer}
+
+Explain the answer step-by-step in simple terms. If user has interests (${userProfile.interests?.join(', ') || 'none'}), relate explanation to their interests.`;
+            
+            response = await generateContent(tutorPrompt);
+          } else {
+            response = `I couldn't find question ${questionNumber} for ${subject} ${year}. Please check the question number and try again.`;
+          }
+        } else {
+          throw new Error('API not available');
+        }
+      } catch (error) {
+        // Fallback to general tutoring
+        const fallbackPrompt = `You are a JAMB tutor. The user asked: "${userQuery}". Provide helpful guidance about JAMB ${subject} topics and suggest they provide the full question text for better help.`;
+        response = await generateContent(fallbackPrompt);
+      }
+    } else {
+      // General JAMB tutoring
+      const generalPrompt = `You are a JAMB tutor. The user asked: "${userQuery}". Provide helpful guidance and ask for more specific details like subject, year, and question number if they need help with past questions.`;
+      response = await generateContent(generalPrompt);
+    }
+    
+    res.json({
+      response,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to get JAMB tutor response' });
+  }
+});
+
+// WAEC Tutor endpoint
+router.post('/waec-tutor', authenticateToken, [
+  body('question').trim().isLength({ min: 1 }),
+  body('userProfile').optional().isObject()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { question: userQuery, userProfile = {} } = req.body;
+    
+    // Parse user query to extract subject, year, and question number
+    const parsingPrompt = `Extract subject, year, and question number from: "${userQuery}". Return JSON with keys: "subject", "year", "questionNumber". Set null if missing.`;
+    
+    const parseResponse = await generateStructuredContent(parsingPrompt, 'json');
+    const { subject, year, questionNumber } = parseResponse || {};
+    
+    let response = '';
+    
+    if (subject && year && questionNumber) {
+      // Try to fetch from ALOC API (if available)
+      const apiUrl = `https://questions.aloc.com.ng/api/v2/m?subject=${subject}&year=${year}&type=waec`;
+      
+      try {
+        const apiResponse = await fetch(apiUrl, {
+          headers: {
+            'AccessToken': process.env.ALOC_API_TOKEN || '',
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (apiResponse.ok) {
+          const data = await apiResponse.json();
+          const questions = data.data || [];
+          const questionIndex = parseInt(questionNumber) - 1;
+          
+          if (questions[questionIndex]) {
+            const q = questions[questionIndex];
+            const options = Object.entries(q.option || {})
+              .map(([key, value]) => `${key.toUpperCase()}. ${value || ''}`)
+              .join('\n');
+            
+            const tutorPrompt = `You are a WAEC tutor. Help with this past question:
+
+Question: ${q.question}
+Options:
+${options}
+Correct Answer: ${q.answer}
+
+Explain the answer step-by-step in simple terms. If user has interests (${userProfile.interests?.join(', ') || 'none'}), relate explanation to their interests.`;
+            
+            response = await generateContent(tutorPrompt);
+          } else {
+            response = `I couldn't find question ${questionNumber} for ${subject} ${year}. Please check the question number and try again.`;
+          }
+        } else {
+          throw new Error('API not available');
+        }
+      } catch (error) {
+        // Fallback to general tutoring
+        const fallbackPrompt = `You are a WAEC tutor. The user asked: "${userQuery}". Provide helpful guidance about WAEC ${subject} topics and suggest they provide the full question text for better help.`;
+        response = await generateContent(fallbackPrompt);
+      }
+    } else {
+      // General WAEC tutoring
+      const generalPrompt = `You are a WAEC tutor. The user asked: "${userQuery}". Provide helpful guidance and ask for more specific details like subject, year, and question number if they need help with past questions.`;
+      response = await generateContent(generalPrompt);
+    }
+    
+    res.json({
+      response,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to get WAEC tutor response' });
+  }
+});
+
 // Explain past questions
 router.post('/explain/question', authenticateToken, [
   body('question').trim().isLength({ min: 1 }),
