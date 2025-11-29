@@ -183,6 +183,61 @@
           "401": {"description": "Unauthorized"}
         }
       }
+    },
+    "/api/materials/convert": {
+      "post": {
+        "summary": "Convert academic material to personalized format",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "material": {"type": "string", "format": "binary"},
+                  "interests": {"type": "string", "example": "sports, music, technology"},
+                  "learningStyle": {"type": "string", "example": "Visual"},
+                  "difficulty": {"type": "string", "example": "Intermediate"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Material converted successfully"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/api/materials/history": {
+      "get": {
+        "summary": "Get material conversion history",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {"description": "Conversion history"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/api/materials/conversion/{id}": {
+      "get": {
+        "summary": "Get specific material conversion",
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "integer"}
+          }
+        ],
+        "responses": {
+          "200": {"description": "Conversion details"},
+          "401": {"description": "Unauthorized"},
+          "404": {"description": "Conversion not found"}
+        }
+      }
     }
   }
 }

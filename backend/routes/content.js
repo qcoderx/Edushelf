@@ -263,11 +263,14 @@ router.get('/quizzes', authenticateToken, async (req, res) => {
   }
 });
 
-// Generate content endpoint (matching swagger documentation)
-router.post('/generate', authenticateToken, [
+// Generate content endpoint with AI
+router.post('/generate', [
   body('subject').isString(),
   body('topic').isString(),
-  body('difficulty').optional().isString()
+  body('difficulty').optional().isString(),
+  body('contentType').optional().isString(),
+  body('learningStyle').optional().isString(),
+  body('userProfile').optional().isObject()
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -275,36 +278,80 @@ router.post('/generate', authenticateToken, [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { subject, topic, difficulty = 'intermediate' } = req.body;
-    
-    // Convert difficulty to number
-    const difficultyLevel = difficulty === 'easy' ? 1 : difficulty === 'medium' ? 3 : difficulty === 'hard' ? 5 : 3;
-    
-    // Create a simple lesson
-    const result = await db.query(`
-      INSERT INTO lessons (user_id, title, subject, content, difficulty_level, estimated_duration)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING *
-    `, [
-      req.user.id, 
-      `${topic} - ${subject}`,
-      subject,
-      `Generated content for ${topic} in ${subject}. This is a ${difficulty} level lesson covering key concepts and examples.`,
-      difficultyLevel,
-      30
-    ]);
+    const { 
+      subject, 
+      topic, 
+      difficulty = 'medium', 
+      contentType = 'lesson',
+      learningStyle = 'visual',
+      userProfile = {} 
+    } = req.body;
+
+    const { GoogleGenerativeAI } = require('@google/generative-ai');
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const interests = userProfile.interests || [];
+    const studentName = userProfile.name || 'Student';
+
+    let prompt;
+    if (contentType === 'lesson') {
+      prompt = `Create a comprehensive ${difficulty} level lesson on "${topic}" for ${subject}.
+
+Student Profile:
+- Name: ${studentName}
+- Learning Style: ${learningStyle}
+- Interests: ${interests.join(', ') || 'Not specified'}
+
+Requirements:
+1. Start with an engaging introduction
+2. Break down complex concepts into digestible sections
+3. ${interests.length > 0 ? `Use analogies and examples related to: ${interests.slice(0, 2).join(', ')}` : 'Use relatable real-world examples'}
+4. Include practical applications
+5. End with key takeaways
+6. Adapt explanations to ${learningStyle} learning style
+7. Use markdown formatting for better readability
+
+Make it engaging and personalized for the student's interests!`;
+    } else if (contentType === 'summary') {
+      prompt = `Create a concise summary of "${topic}" in ${subject} at ${difficulty} level.
+
+Student Profile:
+- Interests: ${interests.join(', ') || 'Not specified'}
+
+Requirements:
+1. Key concepts in bullet points
+2. Important formulas or definitions
+3. ${interests.length > 0 ? `Examples relating to ${interests[0]}` : 'Practical examples'}
+4. Quick review points
+5. Use markdown formatting`;
+    } else {
+      prompt = `Generate 5 practice questions on "${topic}" for ${subject} at ${difficulty} level.
+
+Student Profile:
+- Interests: ${interests.join(', ') || 'Not specified'}
+
+Requirements:
+1. Multiple choice questions with 4 options each
+2. Include correct answers and explanations
+3. ${interests.length > 0 ? `Use examples from ${interests[0]} where possible` : 'Use practical scenarios'}
+4. Progressive difficulty
+5. Format as markdown`;
+    }
+
+    const result = await model.generateContent(prompt);
+    const content = result.response.text();
 
     res.json({
-      id: result.rows[0].id,
-      title: result.rows[0].title,
-      content: result.rows[0].content,
-      subject: result.rows[0].subject,
-      difficulty: difficulty,
-      estimatedDuration: result.rows[0].estimated_duration,
-      createdAt: result.rows[0].created_at
+      content,
+      subject,
+      topic,
+      difficulty,
+      contentType,
+      personalizedFor: interests.length > 0 ? interests.slice(0, 2) : null
     });
   } catch (error) {
-    console.error(error);
+    console.error('Content generation error:', error);
     res.status(500).json({ error: 'Failed to generate content' });
   }
 });
