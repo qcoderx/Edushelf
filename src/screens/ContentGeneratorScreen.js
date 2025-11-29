@@ -42,36 +42,47 @@ const ContentGeneratorScreen = ({ navigation }) => {
     setIsGenerating(true);
     
     try {
+      console.log('Generating content with Gemini 2.5 Flash...');
+      const token = await AsyncStorage.getItem('userToken');
+      
       const response = await fetch('https://edushelf-re0u.onrender.com/api/content/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
         body: JSON.stringify({
           subject,
           topic: topic.trim(),
           difficulty: getDifficultyLabel().toLowerCase(),
-          contentType: contentType.toLowerCase(),
+          contentType: contentType.toLowerCase().replace(' ', '_'),
           learningStyle: learningStyle === 'Default (Adaptive)' ? userProfile?.learningStyle?.[0] || 'visual' : learningStyle.toLowerCase(),
           userProfile: {
-            interests: userProfile?.interests || [],
+            interests: userProfile?.interests || ['technology', 'sports'],
             name: userProfile?.name || 'Student'
           }
         })
       });
       
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data:', data);
       
       if (data.content) {
+        Alert.alert('Success!', 'Content generated with Gemini 2.5 Flash! 🎉');
         navigation.navigate('LessonView', {
           topic,
           subject,
           contentType,
           difficulty: getDifficultyLabel(),
-          content: data.content
+          content: data.content,
+          personalizedFor: data.personalizedFor
         });
       } else {
         throw new Error(data.error || 'Failed to generate content');
       }
     } catch (error) {
+      console.error('Content generation error:', error);
       Alert.alert('Error', error.message || 'Failed to generate content. Please try again.');
     } finally {
       setIsGenerating(false);
