@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
@@ -34,6 +36,31 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Invalid input
+ */
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/content', contentRoutes);
@@ -62,46 +89,36 @@ app.get('/', (req, res) => {
   });
 });
 
-// API Documentation
-app.get('/docs', (req, res) => {
-  res.json({
-    title: 'Lumina Backend API Documentation',
-    version: '1.0.0',
-    baseUrl: req.protocol + '://' + req.get('host'),
-    endpoints: {
-      'POST /api/auth/register': 'Register new user',
-      'POST /api/auth/login': 'Login user',
-      'GET /api/users/profile': 'Get user profile',
-      'POST /api/content/generate': 'Generate AI content',
-      'GET /api/progress': 'Get user progress',
-      'GET /api/leaderboard': 'Get leaderboard',
-      'POST /api/notebook/notes': 'Create note',
-      'GET /api/schedule': 'Get study schedule',
-      'POST /api/ai/chat': 'AI tutor chat',
-      'POST /api/ai/quiz': 'Generate quiz'
+// Swagger configuration
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Lumina Backend API',
+      version: '1.0.0',
+      description: 'AI-powered adaptive learning platform API'
     },
-    examples: {
-      register: {
-        url: '/api/auth/register',
-        method: 'POST',
-        body: {
-          name: 'John Doe',
-          email: 'john@example.com',
-          password: 'password123'
-        }
-      },
-      chat: {
-        url: '/api/ai/chat',
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer YOUR_TOKEN' },
-        body: {
-          message: 'Explain photosynthesis',
-          subject: 'Biology'
+    servers: [
+      {
+        url: process.env.NODE_ENV === 'production' ? 'https://edushelf-re0u.onrender.com' : 'http://localhost:3000',
+        description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server'
+      }
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
         }
       }
     }
-  });
-});
+  },
+  apis: ['./routes/*.js']
+};
+
+const specs = swaggerJsdoc(swaggerOptions);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Health check
 app.get('/health', (req, res) => {
