@@ -44,7 +44,14 @@ router.post('/register', [
 
     res.status(201).json({
       token,
-      user: { id: user.id, email: user.email, name: user.name }
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name,
+        examFocus: null,
+        learningStyle: null,
+        interests: null
+      }
     });
   } catch (error) {
     console.error(error);

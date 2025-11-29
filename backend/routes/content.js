@@ -263,6 +263,52 @@ router.get('/quizzes', authenticateToken, async (req, res) => {
   }
 });
 
+// Generate content endpoint (matching swagger documentation)
+router.post('/generate', authenticateToken, [
+  body('subject').isString(),
+  body('topic').isString(),
+  body('difficulty').optional().isString()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { subject, topic, difficulty = 'intermediate' } = req.body;
+    
+    // Convert difficulty to number
+    const difficultyLevel = difficulty === 'easy' ? 1 : difficulty === 'medium' ? 3 : difficulty === 'hard' ? 5 : 3;
+    
+    // Create a simple lesson
+    const result = await db.query(`
+      INSERT INTO lessons (user_id, title, subject, content, difficulty_level, estimated_duration)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *
+    `, [
+      req.user.id, 
+      `${topic} - ${subject}`,
+      subject,
+      `Generated content for ${topic} in ${subject}. This is a ${difficulty} level lesson covering key concepts and examples.`,
+      difficultyLevel,
+      30
+    ]);
+
+    res.json({
+      id: result.rows[0].id,
+      title: result.rows[0].title,
+      content: result.rows[0].content,
+      subject: result.rows[0].subject,
+      difficulty: difficulty,
+      estimatedDuration: result.rows[0].estimated_duration,
+      createdAt: result.rows[0].created_at
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to generate content' });
+  }
+});
+
 // Get content statistics
 router.get('/stats', authenticateToken, async (req, res) => {
   try {

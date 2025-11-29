@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 
 const LearningStyleScreen = ({ navigation }) => {
@@ -33,7 +34,9 @@ const LearningStyleScreen = ({ navigation }) => {
     },
   ];
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // Save selected learning style
+    await AsyncStorage.setItem('selectedLearningStyle', selectedStyle);
     navigation.navigate('Interests');
   };
 

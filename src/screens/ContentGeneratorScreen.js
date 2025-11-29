@@ -1,19 +1,51 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const ContentGeneratorScreen = ({ navigation }) => {
   const [contentType, setContentType] = useState('Lesson');
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState(45);
   const [learningStyle, setLearningStyle] = useState('Default (Adaptive)');
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const contentTypes = ['Lesson', 'Summary', 'Practice Questions'];
   const learningStyles = ['Default (Adaptive)', 'Visual', 'Auditory', 'Kinesthetic'];
 
-  const handleGenerate = () => {
-    navigation.navigate('LessonView', { topic, contentType });
+  const handleGenerate = async () => {
+    if (!topic.trim()) {
+      Alert.alert('Error', 'Please enter a topic');
+      return;
+    }
+
+    setIsGenerating(true);
+    
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        ApiService.setToken(token);
+      }
+      
+      const response = await ApiService.generateContent({
+        subject: 'Mathematics',
+        topic: topic.trim(),
+        difficulty: getDifficultyLabel().toLowerCase()
+      });
+      
+      navigation.navigate('LessonView', {
+        topic,
+        contentType,
+        difficulty: getDifficultyLabel(),
+        content: response
+      });
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Failed to generate content. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const getDifficultyLabel = () => {
@@ -25,7 +57,7 @@ const ContentGeneratorScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={24} color={colors.white} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Content Generator</Text>
@@ -92,11 +124,13 @@ const ContentGeneratorScreen = ({ navigation }) => {
 
       <View style={styles.footer}>
         <TouchableOpacity 
-          style={[styles.generateButton, !topic && styles.disabledButton]} 
+          style={[styles.generateButton, (!topic || isGenerating) && styles.disabledButton]} 
           onPress={handleGenerate}
-          disabled={!topic}
+          disabled={!topic || isGenerating}
         >
-          <Text style={styles.generateButtonText}>Generate Content</Text>
+          <Text style={styles.generateButtonText}>
+            {isGenerating ? 'Generating...' : 'Generate Content'}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -114,6 +148,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  backButton: {
+    padding: 8,
+    marginLeft: -8,
   },
   headerTitle: {
     fontSize: 18,

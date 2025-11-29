@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 
 const InterestsScreen = ({ navigation }) => {
@@ -26,7 +27,9 @@ const InterestsScreen = ({ navigation }) => {
     );
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    // Save selected interests
+    await AsyncStorage.setItem('selectedInterests', JSON.stringify(selectedInterests));
     navigation.navigate('Preferences');
   };
 

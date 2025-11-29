@@ -318,6 +318,47 @@ Generate as JSON:
   }
 });
 
+// AI Chat endpoint (matching swagger documentation)
+router.post('/chat', authenticateToken, [
+  body('message').trim().isLength({ min: 1 }),
+  body('subject').optional().isString(),
+  body('context').optional().isString()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { message, subject = 'General', context = '' } = req.body;
+    
+    const prompt = `You are an expert ${subject} tutor for Nigerian students preparing for JAMB and WAEC exams. 
+    
+Student's question: "${message}"
+Subject: ${subject}
+Context: ${context}
+
+Provide a helpful, educational response that:
+1. Directly answers the student's question
+2. Uses simple, clear language
+3. Includes relevant examples from Nigerian curriculum
+4. Encourages further learning
+5. Stays focused on ${subject}
+
+Keep response under 200 words and be encouraging.`;
+
+    const response = await generateContent(prompt);
+
+    res.json({
+      response,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to get AI response' });
+  }
+});
+
 // Explain past questions
 router.post('/explain/question', authenticateToken, [
   body('question').trim().isLength({ min: 1 }),

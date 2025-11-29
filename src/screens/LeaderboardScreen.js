@@ -1,14 +1,37 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const LeaderboardScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('Overall');
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadLeaderboard();
+  }, []);
+
+  const loadLeaderboard = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        ApiService.setToken(token);
+        const data = await ApiService.getLeaderboard();
+        setLeaderboardData(data || []);
+      }
+    } catch (error) {
+      console.error('Failed to load leaderboard:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const categories = ['Overall', 'Mathematics', 'Physics', 'Chemistry', 'Biology'];
 
-  const leaderboardData = [
+  const mockData = [
     {
       rank: 1,
       name: 'Adebayo Tunde',
@@ -56,12 +79,13 @@ const LeaderboardScreen = ({ navigation }) => {
     }
   ];
 
-  const currentUserRank = leaderboardData.find(user => user.isCurrentUser);
+  const displayData = leaderboardData.length > 0 ? leaderboardData : mockData;
+  const currentUserRank = displayData.find(user => user.isCurrentUser);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={colors.white} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Leaderboard</Text>
@@ -87,7 +111,13 @@ const LeaderboardScreen = ({ navigation }) => {
       </ScrollView>
 
       <ScrollView style={styles.content}>
-        {currentUserRank && (
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        ) : (
+          <>
+            {currentUserRank && (
           <View style={styles.currentUserCard}>
             <Text style={styles.currentUserTitle}>Your Position</Text>
             <View style={styles.currentUserInfo}>
@@ -111,12 +141,12 @@ const LeaderboardScreen = ({ navigation }) => {
           <View style={styles.podium}>
             {/* Second Place */}
             <View style={[styles.podiumPosition, styles.secondPlace]}>
-              <Image source={{ uri: leaderboardData[1].avatar }} style={styles.podiumAvatar} />
+              <Image source={{ uri: displayData[1]?.avatar }} style={styles.podiumAvatar} />
               <View style={styles.podiumRank}>
                 <Text style={styles.podiumRankText}>2</Text>
               </View>
-              <Text style={styles.podiumName}>{leaderboardData[1].name.split(' ')[0]}</Text>
-              <Text style={styles.podiumPoints}>{leaderboardData[1].points}</Text>
+              <Text style={styles.podiumName}>{displayData[1]?.name.split(' ')[0]}</Text>
+              <Text style={styles.podiumPoints}>{displayData[1]?.points}</Text>
             </View>
 
             {/* First Place */}
@@ -124,53 +154,55 @@ const LeaderboardScreen = ({ navigation }) => {
               <View style={styles.crownContainer}>
                 <Ionicons name="diamond" size={24} color="#FFD700" />
               </View>
-              <Image source={{ uri: leaderboardData[0].avatar }} style={styles.podiumAvatar} />
+              <Image source={{ uri: displayData[0]?.avatar }} style={styles.podiumAvatar} />
               <View style={styles.podiumRank}>
                 <Text style={styles.podiumRankText}>1</Text>
               </View>
-              <Text style={styles.podiumName}>{leaderboardData[0].name.split(' ')[0]}</Text>
-              <Text style={styles.podiumPoints}>{leaderboardData[0].points}</Text>
+              <Text style={styles.podiumName}>{displayData[0]?.name.split(' ')[0]}</Text>
+              <Text style={styles.podiumPoints}>{displayData[0]?.points}</Text>
             </View>
 
             {/* Third Place */}
             <View style={[styles.podiumPosition, styles.thirdPlace]}>
-              <Image source={{ uri: leaderboardData[2].avatar }} style={styles.podiumAvatar} />
+              <Image source={{ uri: displayData[2]?.avatar }} style={styles.podiumAvatar} />
               <View style={styles.podiumRank}>
                 <Text style={styles.podiumRankText}>3</Text>
               </View>
-              <Text style={styles.podiumName}>{leaderboardData[2].name.split(' ')[0]}</Text>
-              <Text style={styles.podiumPoints}>{leaderboardData[2].points}</Text>
+              <Text style={styles.podiumName}>{displayData[2]?.name.split(' ')[0]}</Text>
+              <Text style={styles.podiumPoints}>{displayData[2]?.points}</Text>
             </View>
           </View>
         </View>
 
-        <View style={styles.leaderboardList}>
-          <Text style={styles.listTitle}>Full Rankings</Text>
-          {leaderboardData.map((user, index) => (
-            <View key={index} style={[styles.leaderboardItem, user.isCurrentUser && styles.currentUserItem]}>
-              <View style={styles.userRank}>
-                <Text style={styles.userRankText}>#{user.rank}</Text>
-              </View>
-              
-              <Image source={{ uri: user.avatar }} style={styles.userAvatar} />
-              
-              <View style={styles.userInfo}>
-                <Text style={styles.userName}>{user.name}</Text>
-                <View style={styles.userStats}>
-                  <Text style={styles.userPoints}>{user.points} pts</Text>
-                  <Text style={styles.userAccuracy}>{user.accuracy}% accuracy</Text>
+            <View style={styles.leaderboardList}>
+              <Text style={styles.listTitle}>Full Rankings</Text>
+              {displayData.map((user, index) => (
+                <View key={index} style={[styles.leaderboardItem, user.isCurrentUser && styles.currentUserItem]}>
+                  <View style={styles.userRank}>
+                    <Text style={styles.userRankText}>#{user.rank}</Text>
+                  </View>
+                  
+                  <Image source={{ uri: user.avatar }} style={styles.userAvatar} />
+                  
+                  <View style={styles.userInfo}>
+                    <Text style={styles.userName}>{user.name}</Text>
+                    <View style={styles.userStats}>
+                      <Text style={styles.userPoints}>{user.points} pts</Text>
+                      <Text style={styles.userAccuracy}>{user.accuracy}% accuracy</Text>
+                    </View>
+                  </View>
+                  
+                  <View style={styles.userBadges}>
+                    <View style={styles.streakBadge}>
+                      <Ionicons name="flame" size={16} color={colors.primary} />
+                      <Text style={styles.streakText}>{user.streak}</Text>
+                    </View>
+                  </View>
                 </View>
-              </View>
-              
-              <View style={styles.userBadges}>
-                <View style={styles.streakBadge}>
-                  <Ionicons name="flame" size={16} color={colors.primary} />
-                  <Text style={styles.streakText}>{user.streak}</Text>
-                </View>
-              </View>
+              ))}
             </View>
-          ))}
-        </View>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -187,6 +219,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  backButton: {
+    padding: 8,
+    marginLeft: -8,
   },
   headerTitle: {
     fontSize: 18,
@@ -425,6 +461,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     color: colors.primary,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
   },
 });
 

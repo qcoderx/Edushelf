@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 import ChatBubble from '../components/ChatBubble';
 import QuestionCard from '../components/QuestionCard';
+import ApiService from '../services/api';
 
 const AITutorChatScreen = () => {
   const [inputText, setInputText] = useState('');
@@ -60,15 +61,58 @@ const AITutorChatScreen = () => {
     }
   ]);
 
-  const handleSend = () => {
-    if (inputText.trim()) {
-      const newMessage = {
-        id: messages.length + 1,
-        text: inputText,
-        isAI: false,
-      };
-      setMessages([...messages, newMessage]);
-      setInputText('');
+  const handleSend = async () => {
+    if (!inputText.trim()) return;
+    
+    const userMessage = {
+      id: messages.length + 1,
+      text: inputText,
+      isAI: false,
+    };
+    
+    setMessages(prev => [...prev, userMessage]);
+    const messageText = inputText;
+    setInputText('');
+    
+    // Add typing indicator
+    const typingMessage = {
+      id: messages.length + 2,
+      text: '',
+      isAI: true,
+      isTyping: true,
+      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAwLlrUyq-erQ6Z9NllcEZBG_PHZiYkZcVMPBFO-gBNkQ4LodY3mB89Qz5JzRav1yKgPdzv9Oc4vu0wT_0F1rhDlvvw9iqXI1SGFRljp6XeaFEZxpBm-k818wJUkU0BeD6DjfXXZ9darV1_l_2jodhNq5SgmfPeLT1BNxlp5nnvofNssgcVuVaMezLU-YMGCJDLeuR3F9KWCo4x7yIdWkVLUKb7ciHxpXTmpOeFAPyR2b_FseA0Kqbch0bXCM-rZlaU7I710dYr6EA'
+    };
+    
+    setMessages(prev => [...prev, typingMessage]);
+    
+    try {
+      const response = await ApiService.chatWithAI({
+        message: messageText,
+        subject: 'Physics',
+        context: 'WAEC preparation'
+      });
+      
+      // Remove typing indicator and add AI response
+      setMessages(prev => {
+        const withoutTyping = prev.filter(msg => !msg.isTyping);
+        return [...withoutTyping, {
+          id: Date.now(),
+          text: response.response || 'I apologize, but I encountered an issue. Please try again.',
+          isAI: true,
+          avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC30Ca4AbEFi0MJh7FJNM1EBDxHzmfhwL-8dpMI4m29nwTkH0zVFpWxpsaszT2kiHVFaRBwgXgNAMQxaDMtw_Yuk1uVgAxcRFyx5LpVBLlvJZseHPw6HHAPZyWLKjBN0m5_CwoiNp1nfcTSohH-qBKww5tC9f6xlXDM8szLT1qQeGIpdSoK27VJDe6yk0bBimgWb1BW4vMnIz5bSYwxM6QJIXqF_uTUW1tOC3-2e9xK7lA8ZYVldEbIMWQVRK-0hatZmeh8xTdAbqg'
+        }];
+      });
+    } catch (error) {
+      // Remove typing indicator and add error message
+      setMessages(prev => {
+        const withoutTyping = prev.filter(msg => !msg.isTyping);
+        return [...withoutTyping, {
+          id: Date.now(),
+          text: 'Sorry, I\'m having trouble connecting right now. Please try again later.',
+          isAI: true,
+          avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC30Ca4AbEFi0MJh7FJNM1EBDxHzmfhwL-8dpMI4m29nwTkH0zVFpWxpsaszT2kiHVFaRBwgXgNAMQxaDMtw_Yuk1uVgAxcRFyx5LpVBLlvJZseHPw6HHAPZyWLKjBN0m5_CwoiNp1nfcTSohH-qBKww5tC9f6xlXDM8szLT1qQeGIpdSoK27VJDe6yk0bBimgWb1BW4vMnIz5bSYwxM6QJIXqF_uTUW1tOC3-2e9xK7lA8ZYVldEbIMWQVRK-0hatZmeh8xTdAbqg'
+        }];
+      });
     }
   };
 

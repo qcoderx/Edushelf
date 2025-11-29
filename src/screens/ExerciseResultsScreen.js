@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const ExerciseResultsScreen = ({ navigation, route }) => {
-  const { selectedAnswer, correctAnswer, currentQuestion, totalQuestions } = route?.params || {};
+  const { selectedAnswer, correctAnswer, currentQuestion, totalQuestions, subject, topic } = route?.params || {};
   const isCorrect = selectedAnswer === correctAnswer;
+
+  useEffect(() => {
+    updateProgress();
+  }, []);
+
+  const updateProgress = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        ApiService.setToken(token);
+        await ApiService.updateProgress({
+          subject: subject || 'General',
+          topic: topic || 'Practice',
+          progress_percentage: isCorrect ? 10 : 5,
+          time_spent: 60
+        });
+      }
+    } catch (error) {
+      console.error('Failed to update progress:', error);
+    }
+  };
 
   const handleNext = () => {
     if (currentQuestion < totalQuestions) {

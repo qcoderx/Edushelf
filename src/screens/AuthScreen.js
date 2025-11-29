@@ -1,16 +1,61 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const AuthScreen = ({ navigation }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleAuth = () => {
-    navigation.replace('OnboardingStack');
+  const handleAuth = async () => {
+    if (!email || !password || (!isLogin && !name)) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      
+      if (isLogin) {
+        const response = await ApiService.login({ email, password });
+        if (response.token) {
+          await AsyncStorage.setItem('userToken', response.token);
+          await AsyncStorage.setItem('userData', JSON.stringify(response.user));
+          
+          // Check if user has completed onboarding
+          const hasCompletedOnboarding = response.user.examFocus && response.user.learningStyle;
+          
+          if (hasCompletedOnboarding) {
+            navigation.replace('MainTabs');
+          } else {
+            navigation.replace('OnboardingStack');
+          }
+        }
+      } else {
+        const response = await ApiService.register({ name, email, password });
+        if (response.token) {
+          await AsyncStorage.setItem('userToken', response.token);
+          await AsyncStorage.setItem('userData', JSON.stringify(response.user));
+          // New users always go to onboarding
+          navigation.replace('OnboardingStack');
+        } else {
+          Alert.alert('Success', 'Registration successful! Please login.');
+          setIsLogin(true);
+          setName('');
+          setPassword('');
+        }
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Authentication failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -37,6 +82,19 @@ const AuthScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.form}>
+          {!isLogin && (
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Full Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your full name"
+                placeholderTextColor={colors.slate500}
+                value={name}
+                onChangeText={setName}
+              />
+            </View>
+          )}
+          
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email</Text>
             <TextInput
@@ -78,8 +136,14 @@ const AuthScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.authButton} onPress={handleAuth}>
-          <Text style={styles.authButtonText}>{isLogin ? 'Login' : 'Register'}</Text>
+        <TouchableOpacity 
+          style={[styles.authButton, isLoading && styles.authButtonDisabled]} 
+          onPress={handleAuth}
+          disabled={isLoading}
+        >
+          <Text style={styles.authButtonText}>
+            {isLoading ? 'Please wait...' : (isLogin ? 'Login' : 'Register')}
+          </Text>
         </TouchableOpacity>
 
         <View style={styles.divider}>
@@ -225,6 +289,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: colors.black,
+  },
+  authButtonDisabled: {
+    opacity: 0.6,
   },
   divider: {
     flexDirection: 'row',

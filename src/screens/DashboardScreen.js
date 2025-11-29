@@ -1,9 +1,15 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const DashboardScreen = ({ navigation }) => {
+  const [progressData, setProgressData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState('Student');
+
   const quickAccessItems = [
     { id: 'ai-tutor', name: 'AI Tutor', icon: 'chatbubbles', screen: 'AITutorChat' },
     { id: 'content-generator', name: 'Content Generator', icon: 'create', screen: 'ContentGenerator' },
@@ -15,123 +21,162 @@ const DashboardScreen = ({ navigation }) => {
     { id: 'virtual-lab', name: 'Virtual Lab', icon: 'flask', screen: 'VirtualLabHub' },
   ];
 
-  const weeklyData = [
-    { day: 'Mon', percentage: 60 },
-    { day: 'Tue', percentage: 75 },
-    { day: 'Wed', percentage: 50 },
-    { day: 'Thu', percentage: 85 },
-    { day: 'Fri', percentage: 70 },
-    { day: 'Sat', percentage: 95 },
-    { day: 'Sun', percentage: 65 },
-  ];
+  useEffect(() => {
+    loadProgressData();
+    loadUserData();
+  }, []);
+
+  const loadProgressData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        ApiService.setToken(token);
+        const progress = await ApiService.getProgress();
+        setProgressData(progress);
+      }
+    } catch (error) {
+      console.error('Failed to load progress:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadUserData = async () => {
+    try {
+      const userData = await AsyncStorage.getItem('userData');
+      if (userData) {
+        const user = JSON.parse(userData);
+        setUserName(user.name || 'Student');
+      }
+    } catch (error) {
+      console.error('Failed to load user data:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.greeting}>Hello, Tunde!</Text>
+        <Text style={styles.greeting}>Hello, {userName}!</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Ionicons name="person-circle" size={48} color={colors.white} />
         </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.learningPathCard}>
-          <Image
-            source={{ uri: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=200&fit=crop' }}
-            style={styles.cardImage}
-          />
-          <View style={styles.cardContent}>
-            <Text style={styles.cardLabel}>MY LEARNING PATH</Text>
-            <Text style={styles.cardTitle}>Physics: Kinematics</Text>
-            <View style={styles.progressSection}>
-              <View style={styles.progressHeader}>
-                <Text style={styles.progressLabel}>Overall Progress</Text>
-                <Text style={styles.progressPercentage}>65%</Text>
-              </View>
-              <View style={styles.progressBar}>
-                <View style={[styles.progressFill, { width: '65%' }]} />
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        ) : (
+          <>
+            <View style={styles.learningPathCard}>
+              <Image
+                source={{ uri: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=200&fit=crop' }}
+                style={styles.cardImage}
+              />
+              <View style={styles.cardContent}>
+                <Text style={styles.cardLabel}>MY LEARNING PATH</Text>
+                <Text style={styles.cardTitle}>Physics: Kinematics</Text>
+                <View style={styles.progressSection}>
+                  <View style={styles.progressHeader}>
+                    <Text style={styles.progressLabel}>Overall Progress</Text>
+                    <Text style={styles.progressPercentage}>{progressData?.overallProgress || 0}%</Text>
+                  </View>
+                  <View style={styles.progressBar}>
+                    <View style={[styles.progressFill, { width: `${progressData?.overallProgress || 0}%` }]} />
+                  </View>
+                </View>
+                <View style={styles.cardFooter}>
+                  <Text style={styles.encouragementText}>You are making great progress!</Text>
+                  <TouchableOpacity style={styles.continueButton}>
+                    <Text style={styles.continueButtonText}>Continue</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-            <View style={styles.cardFooter}>
-              <Text style={styles.encouragementText}>You are making great progress!</Text>
-              <TouchableOpacity style={styles.continueButton}>
-                <Text style={styles.continueButtonText}>Continue</Text>
+
+            <View style={styles.statsContainer}>
+              <View style={styles.statCard}>
+                <View style={styles.statHeader}>
+                  <Ionicons name="flame" size={18} color={colors.aiBubble} />
+                  <Text style={styles.statLabel}>Streak</Text>
+                </View>
+                <Text style={styles.statValue}>{progressData?.streak || 0} days</Text>
+                <Text style={styles.statChange}>+{progressData?.dailyStreak || 0} today</Text>
+              </View>
+              <View style={styles.statCard}>
+                <View style={styles.statHeader}>
+                  <Ionicons name="star" size={18} color={colors.aiBubble} />
+                  <Text style={styles.statLabel}>Points</Text>
+                </View>
+                <Text style={styles.statValue}>{progressData?.totalPoints || 0}</Text>
+                <Text style={styles.statChange}>+{progressData?.dailyPoints || 0}</Text>
+              </View>
+              <View style={styles.statCard}>
+                <View style={styles.statHeader}>
+                  <Ionicons name="trophy" size={18} color={colors.aiBubble} />
+                  <Text style={styles.statLabel}>Rank</Text>
+                </View>
+                <Text style={styles.statValue}>#{progressData?.rank || 0}</Text>
+                <View style={styles.rankChange}>
+                  <Ionicons name="arrow-up" size={16} color="#0bda5b" />
+                  <Text style={styles.statChange}>1</Text>
+                </View>
+              </View>
+            </View>
+
+            <Text style={styles.sectionTitle}>Quick Access</Text>
+            <View style={styles.quickAccessGrid}>
+              {quickAccessItems.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.quickAccessCard}
+                  onPress={() => navigation.navigate(item.screen)}
+                >
+                  <View style={styles.quickAccessIcon}>
+                    <Ionicons name={item.icon} size={24} color={colors.primary} />
+                  </View>
+                  <Text style={styles.quickAccessText}>{item.name}</Text>
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity
+                style={styles.quickAccessCard}
+                onPress={() => navigation.navigate('Test')}
+              >
+                <View style={styles.quickAccessIcon}>
+                  <Ionicons name="bug" size={24} color={colors.primary} />
+                </View>
+                <Text style={styles.quickAccessText}>API Test</Text>
               </TouchableOpacity>
             </View>
-          </View>
-        </View>
 
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <View style={styles.statHeader}>
-              <Ionicons name="flame" size={18} color={colors.aiBubble} />
-              <Text style={styles.statLabel}>Streak</Text>
-            </View>
-            <Text style={styles.statValue}>12 days</Text>
-            <Text style={styles.statChange}>+2 today</Text>
-          </View>
-          <View style={styles.statCard}>
-            <View style={styles.statHeader}>
-              <Ionicons name="star" size={18} color={colors.aiBubble} />
-              <Text style={styles.statLabel}>Points</Text>
-            </View>
-            <Text style={styles.statValue}>1,500</Text>
-            <Text style={styles.statChange}>+100</Text>
-          </View>
-          <View style={styles.statCard}>
-            <View style={styles.statHeader}>
-              <Ionicons name="trophy" size={18} color={colors.aiBubble} />
-              <Text style={styles.statLabel}>Rank</Text>
-            </View>
-            <Text style={styles.statValue}>#12</Text>
-            <View style={styles.rankChange}>
-              <Ionicons name="arrow-up" size={16} color="#0bda5b" />
-              <Text style={styles.statChange}>1</Text>
-            </View>
-          </View>
-        </View>
-
-        <Text style={styles.sectionTitle}>Quick Access</Text>
-        <View style={styles.quickAccessGrid}>
-          {quickAccessItems.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.quickAccessCard}
-              onPress={() => navigation.navigate(item.screen)}
-            >
-              <View style={styles.quickAccessIcon}>
-                <Ionicons name={item.icon} size={24} color={colors.primary} />
+            <Text style={styles.sectionTitle}>Weekly Progress</Text>
+            <View style={styles.chartCard}>
+              <View style={styles.chart}>
+                {(progressData?.weeklyData || []).map((data, index) => (
+                  <View key={data.day} style={styles.chartColumn}>
+                    <View
+                      style={[
+                        styles.chartBar,
+                        {
+                          height: `${data.percentage}%`,
+                          backgroundColor: index === 6 ? colors.aiBubble : colors.aiBubble + '40',
+                        },
+                      ]}
+                    />
+                    <Text style={[
+                      styles.chartLabel,
+                      index === 6 && styles.activeChartLabel
+                    ]}>
+                      {data.day}
+                    </Text>
+                  </View>
+                ))}
               </View>
-              <Text style={styles.quickAccessText}>{item.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <Text style={styles.sectionTitle}>Weekly Progress</Text>
-        <View style={styles.chartCard}>
-          <View style={styles.chart}>
-            {weeklyData.map((data, index) => (
-              <View key={data.day} style={styles.chartColumn}>
-                <View
-                  style={[
-                    styles.chartBar,
-                    {
-                      height: `${data.percentage}%`,
-                      backgroundColor: index === 6 ? colors.aiBubble : colors.aiBubble + '40',
-                    },
-                  ]}
-                />
-                <Text style={[
-                  styles.chartLabel,
-                  index === 6 && styles.activeChartLabel
-                ]}>
-                  {data.day}
-                </Text>
-              </View>
-            ))}
-          </View>
-          <Text style={styles.chartDescription}>Correct Answers (%)</Text>
-        </View>
+              <Text style={styles.chartDescription}>Correct Answers (%)</Text>
+            </View>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -350,6 +395,12 @@ const styles = StyleSheet.create({
     color: colors.slate500,
     textAlign: 'center',
     marginTop: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
   },
 });
 

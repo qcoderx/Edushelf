@@ -25,6 +25,7 @@ import DigitalNotebookScreen from '../screens/DigitalNotebookScreen';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 import VirtualLabHubScreen from '../screens/VirtualLabHubScreen';
 import ActiveExperimentScreen from '../screens/ActiveExperimentScreen';
+import TestScreen from '../screens/TestScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -100,6 +101,7 @@ const AppNavigator = () => (
       <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
       <Stack.Screen name="VirtualLabHub" component={VirtualLabHubScreen} />
       <Stack.Screen name="ActiveExperiment" component={ActiveExperimentScreen} />
+      <Stack.Screen name="Test" component={TestScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );

@@ -145,6 +145,62 @@ router.get('/stats', authenticateToken, async (req, res) => {
   }
 });
 
+// Get leaderboard (matching swagger documentation)
+router.get('/', authenticateToken, async (req, res) => {
+  try {
+    const { subject = 'overall', limit = 50 } = req.query;
+    
+    let query;
+    let params = [parseInt(limit)];
+    
+    if (subject === 'overall') {
+      query = `
+        SELECT 
+          u.id,
+          u.name,
+          u.avatar_url,
+          u.total_points as points,
+          u.current_streak as streak,
+          COALESCE(AVG(p.accuracy), 0) as accuracy,
+          ROW_NUMBER() OVER (ORDER BY u.total_points DESC, u.current_streak DESC) as rank,
+          CASE WHEN u.id = $2 THEN true ELSE false END as isCurrentUser
+        FROM users u
+        LEFT JOIN progress p ON u.id = p.user_id
+        GROUP BY u.id, u.name, u.avatar_url, u.total_points, u.current_streak
+        ORDER BY u.total_points DESC, u.current_streak DESC
+        LIMIT $1
+      `;
+      params.push(req.user.id);
+    } else {
+      query = `
+        SELECT 
+          u.id,
+          u.name,
+          u.avatar_url,
+          COALESCE(SUM(p.correct_answers * 10), 0) as points,
+          u.current_streak as streak,
+          COALESCE(AVG(p.accuracy), 0) as accuracy,
+          ROW_NUMBER() OVER (ORDER BY COALESCE(AVG(p.accuracy), 0) DESC, COALESCE(SUM(p.correct_answers), 0) DESC) as rank,
+          CASE WHEN u.id = $3 THEN true ELSE false END as isCurrentUser
+        FROM users u
+        LEFT JOIN progress p ON u.id = p.user_id AND p.subject = $2
+        GROUP BY u.id, u.name, u.avatar_url, u.current_streak
+        HAVING COUNT(p.id) > 0
+        ORDER BY COALESCE(AVG(p.accuracy), 0) DESC, COALESCE(SUM(p.correct_answers), 0) DESC
+        LIMIT $1
+      `;
+      params = [parseInt(limit), subject, req.user.id];
+    }
+
+    const result = await db.query(query, params);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Update leaderboard (called periodically)
 router.post('/update', authenticateToken, async (req, res) => {
   try {

@@ -1,15 +1,47 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const PreferencesScreen = ({ navigation }) => {
   const [studyTime, setStudyTime] = useState('Evening');
   const [sessionLength, setSessionLength] = useState('30 minutes');
   const [environment, setEnvironment] = useState('Quiet');
 
-  const handleFinish = () => {
-    navigation.replace('MainTabs');
+  const handleFinish = async () => {
+    try {
+      // Get stored onboarding data
+      const examFocus = await AsyncStorage.getItem('selectedExam');
+      const learningStyle = await AsyncStorage.getItem('selectedLearningStyle');
+      const interests = await AsyncStorage.getItem('selectedInterests');
+      const token = await AsyncStorage.getItem('userToken');
+      
+      if (token) {
+        ApiService.setToken(token);
+        
+        // Update user profile with all onboarding data
+        await ApiService.updateUserProfile({
+          examFocus,
+          learningStyle,
+          interests: interests ? JSON.parse(interests) : [],
+          studyPreferences: {
+            studyTime,
+            sessionLength,
+            environment
+          }
+        });
+        
+        // Clear temporary onboarding data
+        await AsyncStorage.multiRemove(['selectedExam', 'selectedLearningStyle', 'selectedInterests']);
+      }
+      
+      navigation.replace('MainTabs');
+    } catch (error) {
+      console.error('Failed to save preferences:', error);
+      Alert.alert('Error', 'Failed to save preferences. Please try again.');
+    }
   };
 
   return (

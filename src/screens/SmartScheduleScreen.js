@@ -1,12 +1,32 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const SmartScheduleScreen = ({ navigation }) => {
   const [selectedDay, setSelectedDay] = useState('Today');
+  const [schedule, setSchedule] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const scheduleData = {
+  useEffect(() => {
+    loadSchedule();
+  }, []);
+
+  const loadSchedule = async () => {
+    try {
+      // Schedule endpoint not available in current API
+      // Using default data for now
+      setSchedule([]);
+    } catch (error) {
+      console.error('Failed to load schedule:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const defaultScheduleData = {
     Today: [
       { time: '09:00', subject: 'Mathematics', topic: 'Algebra', duration: '45 min', completed: true },
       { time: '10:30', subject: 'Physics', topic: 'Mechanics', duration: '60 min', completed: true },
@@ -25,7 +45,7 @@ const SmartScheduleScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={colors.white} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Smart Schedule</Text>
@@ -49,55 +69,63 @@ const SmartScheduleScreen = ({ navigation }) => {
       </View>
 
       <ScrollView style={styles.content}>
-        <View style={styles.progressCard}>
-          <Text style={styles.progressTitle}>Today's Progress</Text>
-          <View style={styles.progressStats}>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressValue}>2/4</Text>
-              <Text style={styles.progressLabel}>Completed</Text>
-            </View>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressValue}>2h 15m</Text>
-              <Text style={styles.progressLabel}>Study Time</Text>
-            </View>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressValue}>50%</Text>
-              <Text style={styles.progressLabel}>Progress</Text>
-            </View>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
           </View>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: '50%' }]} />
-          </View>
-        </View>
-
-        <View style={styles.scheduleList}>
-          {scheduleData[selectedDay].map((item, index) => (
-            <View key={index} style={[styles.scheduleItem, item.completed && styles.completedItem]}>
-              <View style={styles.timeContainer}>
-                <Text style={styles.timeText}>{item.time}</Text>
-                <Text style={styles.durationText}>{item.duration}</Text>
+        ) : (
+          <>
+            <View style={styles.progressCard}>
+              <Text style={styles.progressTitle}>Today's Progress</Text>
+              <View style={styles.progressStats}>
+                <View style={styles.progressItem}>
+                  <Text style={styles.progressValue}>2/4</Text>
+                  <Text style={styles.progressLabel}>Completed</Text>
+                </View>
+                <View style={styles.progressItem}>
+                  <Text style={styles.progressValue}>2h 15m</Text>
+                  <Text style={styles.progressLabel}>Study Time</Text>
+                </View>
+                <View style={styles.progressItem}>
+                  <Text style={styles.progressValue}>50%</Text>
+                  <Text style={styles.progressLabel}>Progress</Text>
+                </View>
               </View>
-              
-              <View style={styles.contentContainer}>
-                <Text style={styles.subjectText}>{item.subject}</Text>
-                <Text style={styles.topicText}>{item.topic}</Text>
+              <View style={styles.progressBar}>
+                <View style={[styles.progressFill, { width: '50%' }]} />
               </View>
-              
-              <TouchableOpacity style={[styles.statusButton, item.completed && styles.completedButton]}>
-                <Ionicons 
-                  name={item.completed ? 'checkmark' : 'play'} 
-                  size={20} 
-                  color={item.completed ? colors.white : colors.primary} 
-                />
-              </TouchableOpacity>
             </View>
-          ))}
-        </View>
 
-        <TouchableOpacity style={styles.addButton}>
-          <Ionicons name="add" size={24} color={colors.black} />
-          <Text style={styles.addButtonText}>Add Study Session</Text>
-        </TouchableOpacity>
+            <View style={styles.scheduleList}>
+              {(schedule.length > 0 ? schedule : defaultScheduleData[selectedDay] || []).map((item, index) => (
+                <View key={index} style={[styles.scheduleItem, item.completed && styles.completedItem]}>
+                  <View style={styles.timeContainer}>
+                    <Text style={styles.timeText}>{item.time}</Text>
+                    <Text style={styles.durationText}>{item.duration}</Text>
+                  </View>
+                  
+                  <View style={styles.contentContainer}>
+                    <Text style={styles.subjectText}>{item.subject}</Text>
+                    <Text style={styles.topicText}>{item.topic}</Text>
+                  </View>
+                  
+                  <TouchableOpacity style={[styles.statusButton, item.completed && styles.completedButton]}>
+                    <Ionicons 
+                      name={item.completed ? 'checkmark' : 'play'} 
+                      size={20} 
+                      color={item.completed ? colors.white : colors.primary} 
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+
+            <TouchableOpacity style={styles.addButton}>
+              <Ionicons name="add" size={24} color={colors.black} />
+              <Text style={styles.addButtonText}>Add Study Session</Text>
+            </TouchableOpacity>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -114,6 +142,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  backButton: {
+    padding: 8,
+    marginLeft: -8,
   },
   headerTitle: {
     fontSize: 18,
@@ -255,6 +287,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: colors.black,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
   },
 });
 

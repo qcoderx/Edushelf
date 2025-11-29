@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const DigitalNotebookScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = ['All', 'Mathematics', 'English', 'Physics', 'Chemistry', 'Biology'];
 
-  const noteSections = {
+  useEffect(() => {
+    loadNotes();
+  }, []);
+
+  const loadNotes = async () => {
+    try {
+      // Notes endpoint not available in current API
+      // Using default data for now
+      setNotes([]);
+    } catch (error) {
+      console.error('Failed to load notes:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const defaultNoteSections = {
     Today: [
       {
         id: 1,
@@ -82,23 +102,42 @@ const DigitalNotebookScreen = ({ navigation }) => {
       </ScrollView>
 
       <ScrollView style={styles.content}>
-        {Object.entries(noteSections).map(([sectionTitle, notes]) => (
-          <View key={sectionTitle}>
-            <Text style={styles.sectionTitle}>{sectionTitle}</Text>
-            {notes.map((note) => (
-              <TouchableOpacity key={note.id} style={styles.noteItem}>
-                <View style={styles.noteIcon}>
-                  <Ionicons name={note.icon} size={24} color={colors.aiBubble} />
-                </View>
-                <View style={styles.noteContent}>
-                  <Text style={styles.noteTitle}>{note.title}</Text>
-                  <Text style={styles.noteSubtitle}>{note.type} • {note.subject}</Text>
-                </View>
-                <Text style={styles.noteTime}>{note.time}</Text>
-              </TouchableOpacity>
-            ))}
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
           </View>
-        ))}
+        ) : notes.length > 0 ? (
+          notes.map((note, index) => (
+            <TouchableOpacity key={note.id || index} style={styles.noteItem}>
+              <View style={styles.noteIcon}>
+                <Ionicons name="book-outline" size={24} color={colors.aiBubble} />
+              </View>
+              <View style={styles.noteContent}>
+                <Text style={styles.noteTitle}>{note.title}</Text>
+                <Text style={styles.noteSubtitle}>{note.subject}</Text>
+              </View>
+              <Text style={styles.noteTime}>{new Date(note.created_at).toLocaleDateString()}</Text>
+            </TouchableOpacity>
+          ))
+        ) : (
+          Object.entries(defaultNoteSections).map(([sectionTitle, sectionNotes]) => (
+            <View key={sectionTitle}>
+              <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+              {sectionNotes.map((note) => (
+                <TouchableOpacity key={note.id} style={styles.noteItem}>
+                  <View style={styles.noteIcon}>
+                    <Ionicons name={note.icon} size={24} color={colors.aiBubble} />
+                  </View>
+                  <View style={styles.noteContent}>
+                    <Text style={styles.noteTitle}>{note.title}</Text>
+                    <Text style={styles.noteSubtitle}>{note.type} • {note.subject}</Text>
+                  </View>
+                  <Text style={styles.noteTime}>{note.time}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ))
+        )}
       </ScrollView>
 
       <TouchableOpacity style={styles.fab}>
@@ -226,6 +265,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
   },
 });
 

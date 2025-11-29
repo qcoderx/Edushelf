@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 
 const OnboardingWizardScreen = ({ navigation }) => {
@@ -21,7 +22,10 @@ const OnboardingWizardScreen = ({ navigation }) => {
     );
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    // Save selected exam (use first selected exam as primary)
+    const primaryExam = selectedExams[0];
+    await AsyncStorage.setItem('selectedExam', primaryExam);
     navigation.navigate('LearningStyle');
   };
 

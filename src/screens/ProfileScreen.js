@@ -1,18 +1,31 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
+import ApiService from '../services/api';
 
 const ProfileScreen = ({ navigation }) => {
-  const profileData = {
-    name: 'Tunde Adebayo',
-    email: 'tunde.adebayo@email.com',
-    examFocus: 'JAMB',
-    learningStyle: 'Visual',
-    streak: 12,
-    totalPoints: 1500,
-    rank: 12,
-    accuracy: 75
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        ApiService.setToken(token);
+        const profile = await ApiService.getUserProfile();
+        setProfileData(profile);
+      }
+    } catch (error) {
+      console.error('Failed to load profile:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const menuItems = [
@@ -27,7 +40,7 @@ const ProfileScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={colors.white} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
@@ -37,62 +50,77 @@ const ProfileScreen = ({ navigation }) => {
       </View>
 
       <ScrollView style={styles.content}>
-        <View style={styles.profileCard}>
-          <Image
-            source={{ uri: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' }}
-            style={styles.avatar}
-          />
-          <Text style={styles.name}>{profileData.name}</Text>
-          <Text style={styles.email}>{profileData.email}</Text>
-          
-          <View style={styles.badgeContainer}>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{profileData.examFocus}</Text>
-            </View>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{profileData.learningStyle}</Text>
-            </View>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
           </View>
-        </View>
-
-        <View style={styles.statsGrid}>
-          <View style={styles.statItem}>
-            <Ionicons name="flame" size={24} color={colors.primary} />
-            <Text style={styles.statValue}>{profileData.streak}</Text>
-            <Text style={styles.statLabel}>Day Streak</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Ionicons name="star" size={24} color={colors.primary} />
-            <Text style={styles.statValue}>{profileData.totalPoints}</Text>
-            <Text style={styles.statLabel}>Total Points</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Ionicons name="trophy" size={24} color={colors.primary} />
-            <Text style={styles.statValue}>#{profileData.rank}</Text>
-            <Text style={styles.statLabel}>Rank</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Ionicons name="checkmark-circle" size={24} color={colors.primary} />
-            <Text style={styles.statValue}>{profileData.accuracy}%</Text>
-            <Text style={styles.statLabel}>Accuracy</Text>
-          </View>
-        </View>
-
-        <View style={styles.menuSection}>
-          {menuItems.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.menuItem}
-              onPress={() => item.screen ? navigation.navigate(item.screen) : console.log(item.action)}
-            >
-              <View style={styles.menuLeft}>
-                <Ionicons name={item.icon} size={24} color={colors.white} />
-                <Text style={styles.menuTitle}>{item.title}</Text>
+        ) : profileData ? (
+          <>
+            <View style={styles.profileCard}>
+              <Image
+                source={{ uri: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' }}
+                style={styles.avatar}
+              />
+              <Text style={styles.name}>{profileData.name}</Text>
+              <Text style={styles.email}>{profileData.email}</Text>
+              
+              <View style={styles.badgeContainer}>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{profileData.examFocus}</Text>
+                </View>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{profileData.learningStyle}</Text>
+                </View>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.slate500} />
+            </View>
+
+            <View style={styles.statsGrid}>
+              <View style={styles.statItem}>
+                <Ionicons name="flame" size={24} color={colors.primary} />
+                <Text style={styles.statValue}>{profileData.streak}</Text>
+                <Text style={styles.statLabel}>Day Streak</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Ionicons name="star" size={24} color={colors.primary} />
+                <Text style={styles.statValue}>{profileData.totalPoints}</Text>
+                <Text style={styles.statLabel}>Total Points</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Ionicons name="trophy" size={24} color={colors.primary} />
+                <Text style={styles.statValue}>#{profileData.rank}</Text>
+                <Text style={styles.statLabel}>Rank</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Ionicons name="checkmark-circle" size={24} color={colors.primary} />
+                <Text style={styles.statValue}>{profileData.accuracy}%</Text>
+                <Text style={styles.statLabel}>Accuracy</Text>
+              </View>
+            </View>
+
+            <View style={styles.menuSection}>
+              {menuItems.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.menuItem}
+                  onPress={() => item.screen ? navigation.navigate(item.screen) : console.log(item.action)}
+                >
+                  <View style={styles.menuLeft}>
+                    <Ionicons name={item.icon} size={24} color={colors.white} />
+                    <Text style={styles.menuTitle}>{item.title}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={20} color={colors.slate500} />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </>
+        ) : (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>Failed to load profile</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={loadProfile}>
+              <Text style={styles.retryText}>Retry</Text>
             </TouchableOpacity>
-          ))}
-        </View>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -109,6 +137,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  backButton: {
+    padding: 8,
+    marginLeft: -8,
   },
   headerTitle: {
     fontSize: 18,
@@ -203,6 +235,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.white,
     fontWeight: '500',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
+  },
+  errorText: {
+    fontSize: 16,
+    color: colors.slate500,
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.black,
   },
 });
 

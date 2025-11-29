@@ -1,5 +1,5 @@
 export const colors = {
-  primary: '#137fec',
+  primary: '#2DE2E6',
   backgroundLight: '#f6f7f8',
   backgroundDark: '#101922',
   aiBubble: '#7F2AF0',
@@ -11,6 +11,7 @@ export const colors = {
   slate200: '#e2e8f0',
   slate300: '#cbd5e1',
   slate700: '#334155',
+  slate800: '#1e293b',
   cardDark: '#1c2127',
   inputDark: '#283039',
 };
