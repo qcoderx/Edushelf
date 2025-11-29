@@ -35,7 +35,59 @@ app.use(limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+/**
+ * @swagger
+ * tags:
+ *   - name: Authentication
+ *     description: User authentication endpoints
+ *   - name: AI
+ *     description: AI-powered features
+ *   - name: Content
+ *     description: Educational content management
+ */
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: API Information
+ *     description: Get basic API information and available endpoints
+ *     responses:
+ *       200:
+ *         description: API information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 version:
+ *                   type: string
+ *                 status:
+ *                   type: string
+ */
+
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Health Check
+ *     description: Check if the API is running
+ *     responses:
+ *       200:
+ *         description: API is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 timestamp:
+ *                   type: string
+ */
+
 /**
  * @swagger
  * /api/auth/register:
@@ -48,19 +100,112 @@ app.use(express.urlencoded({ extended: true }));
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
  *             properties:
  *               name:
  *                 type: string
+ *                 example: John Doe
  *               email:
  *                 type: string
+ *                 format: email
+ *                 example: john@example.com
  *               password:
  *                 type: string
+ *                 minLength: 6
+ *                 example: password123
  *     responses:
  *       201:
  *         description: User registered successfully
  *       400:
- *         description: Invalid input
+ *         description: Invalid input or user already exists
  */
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: john@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *       401:
+ *         description: Invalid credentials
+ */
+
+/**
+ * @swagger
+ * /api/ai/chat:
+ *   post:
+ *     summary: AI Tutor Chat
+ *     tags: [AI]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - message
+ *               - subject
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 example: Explain photosynthesis
+ *               subject:
+ *                 type: string
+ *                 example: Biology
+ *               context:
+ *                 type: string
+ *                 example: WAEC preparation
+ *     responses:
+ *       200:
+ *         description: AI response generated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 response:
+ *                   type: string
+ *                 timestamp:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ */
+
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/content', contentRoutes);
@@ -114,7 +259,7 @@ const swaggerOptions = {
       }
     }
   },
-  apis: ['./routes/*.js']
+  apis: ['./server.js', './routes/*.js']
 };
 
 const specs = swaggerJsdoc(swaggerOptions);
