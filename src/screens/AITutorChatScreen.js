@@ -91,17 +91,37 @@ const AITutorChatScreen = ({ route }) => {
     try {
       let response;
       if (selectedTutor === 'JAMB') {
-        response = await ApiService.chatWithAI({
-          message: `As a JAMB tutor, help with: ${messageText}`,
-          subject: 'General',
-          context: 'JAMB preparation - Focus on UTME past questions and exam strategies'
+        // Call JAMB tutor endpoint directly
+        const apiResponse = await fetch('http://localhost:3000/jamb-tutor', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            question: messageText,
+            userProfile: {
+              name: 'Student',
+              interests: ['Technology', 'Science']
+            }
+          })
         });
+        response = await apiResponse.json();
       } else if (selectedTutor === 'WAEC') {
-        response = await ApiService.chatWithAI({
-          message: `As a WAEC tutor, help with: ${messageText}`,
-          subject: 'General', 
-          context: 'WAEC preparation - Focus on SSCE past questions and exam strategies'
+        // Call WAEC tutor endpoint directly
+        const apiResponse = await fetch('http://localhost:3000/waec-tutor', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            question: messageText,
+            userProfile: {
+              name: 'Student',
+              interests: ['Technology', 'Science']
+            }
+          })
         });
+        response = await apiResponse.json();
       } else {
         response = await ApiService.chatWithAI({
           message: messageText,
