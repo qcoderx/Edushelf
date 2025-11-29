@@ -1,0 +1,188 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Edushelf API",
+    "version": "1.0.0",
+    "description": "AI-powered adaptive learning platform API"
+  },
+  "servers": [
+    {
+      "url": "https://edushelf-re0u.onrender.com",
+      "description": "Production server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string", "example": "John Doe"},
+                  "email": {"type": "string", "example": "john@example.com"},
+                  "password": {"type": "string", "example": "password123"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {"description": "User registered successfully"},
+          "400": {"description": "Invalid input or user already exists"}
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {"type": "string", "example": "john@example.com"},
+                  "password": {"type": "string", "example": "password123"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {"type": "string"},
+                    "user": {"type": "object"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {"description": "Invalid credentials"}
+        }
+      }
+    },
+    "/api/users/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {"description": "User profile data"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/api/content/generate": {
+      "post": {
+        "summary": "Generate educational content",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "subject": {"type": "string", "example": "Mathematics"},
+                  "topic": {"type": "string", "example": "Algebra"},
+                  "difficulty": {"type": "string", "example": "intermediate"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Content generated successfully"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/api/progress": {
+      "get": {
+        "summary": "Get user progress",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {"description": "User progress data"},
+          "401": {"description": "Unauthorized"}
+        }
+      },
+      "post": {
+        "summary": "Update user progress",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "subject": {"type": "string"},
+                  "topic": {"type": "string"},
+                  "progress_percentage": {"type": "number"},
+                  "time_spent": {"type": "number"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Progress updated"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/api/leaderboard": {
+      "get": {
+        "summary": "Get leaderboard data",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {"description": "Leaderboard data"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/api/ai/chat": {
+      "post": {
+        "summary": "Chat with AI tutor",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {"type": "string"},
+                  "subject": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "AI response"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    }
+  }
+}
