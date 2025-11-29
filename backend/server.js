@@ -40,10 +40,20 @@ app.use(express.urlencoded({ extended: true }));
  * tags:
  *   - name: Authentication
  *     description: User authentication endpoints
- *   - name: AI
- *     description: AI-powered features
+ *   - name: Users
+ *     description: User profile management
  *   - name: Content
- *     description: Educational content management
+ *     description: Educational content generation
+ *   - name: Progress
+ *     description: Learning progress tracking
+ *   - name: Leaderboard
+ *     description: User rankings and achievements
+ *   - name: Notebook
+ *     description: Digital note-taking system
+ *   - name: Schedule
+ *     description: Study schedule management
+ *   - name: AI
+ *     description: AI-powered tutoring and content generation
  */
 
 /**
@@ -164,6 +174,196 @@ app.use(express.urlencoded({ extended: true }));
 
 /**
  * @swagger
+ * /api/users/profile:
+ *   get:
+ *     summary: Get user profile
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile data
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/content/generate:
+ *   post:
+ *     summary: Generate educational content
+ *     tags: [Content]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               subject:
+ *                 type: string
+ *                 example: Mathematics
+ *               topic:
+ *                 type: string
+ *                 example: Algebra
+ *               difficulty:
+ *                 type: string
+ *                 example: intermediate
+ *     responses:
+ *       200:
+ *         description: Content generated successfully
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/progress:
+ *   get:
+ *     summary: Get user progress
+ *     tags: [Progress]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User progress data
+ *       401:
+ *         description: Unauthorized
+ *   post:
+ *     summary: Update user progress
+ *     tags: [Progress]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               subject:
+ *                 type: string
+ *               topic:
+ *                 type: string
+ *               progress_percentage:
+ *                 type: integer
+ *               time_spent:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Progress updated
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/leaderboard:
+ *   get:
+ *     summary: Get leaderboard
+ *     tags: [Leaderboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Leaderboard data
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/notebook/notes:
+ *   get:
+ *     summary: Get user notes
+ *     tags: [Notebook]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User notes
+ *       401:
+ *         description: Unauthorized
+ *   post:
+ *     summary: Create a new note
+ *     tags: [Notebook]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Physics Notes
+ *               content:
+ *                 type: string
+ *                 example: Newton's laws of motion...
+ *               subject:
+ *                 type: string
+ *                 example: Physics
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       201:
+ *         description: Note created
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/schedule:
+ *   get:
+ *     summary: Get study schedule
+ *     tags: [Schedule]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Study schedule
+ *       401:
+ *         description: Unauthorized
+ *   post:
+ *     summary: Create schedule item
+ *     tags: [Schedule]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Math Study Session
+ *               subject:
+ *                 type: string
+ *                 example: Mathematics
+ *               scheduled_time:
+ *                 type: string
+ *                 format: date-time
+ *               duration:
+ *                 type: integer
+ *                 example: 60
+ *     responses:
+ *       201:
+ *         description: Schedule created
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
  * /api/ai/chat:
  *   post:
  *     summary: AI Tutor Chat
@@ -201,6 +401,40 @@ app.use(express.urlencoded({ extended: true }));
  *                   type: string
  *                 timestamp:
  *                   type: string
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/ai/quiz:
+ *   post:
+ *     summary: Generate AI Quiz
+ *     tags: [AI]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               subject:
+ *                 type: string
+ *                 example: Chemistry
+ *               topic:
+ *                 type: string
+ *                 example: Organic Chemistry
+ *               difficulty:
+ *                 type: string
+ *                 example: intermediate
+ *               questionCount:
+ *                 type: integer
+ *                 example: 10
+ *     responses:
+ *       200:
+ *         description: Quiz generated
  *       401:
  *         description: Unauthorized
  */
