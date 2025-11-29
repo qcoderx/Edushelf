@@ -4,36 +4,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 
 const LessonViewScreen = ({ navigation, route }) => {
-  const { topic = 'Newton\'s Laws of Motion', contentType = 'Lesson' } = route?.params || {};
+  const { 
+    topic = 'Sample Topic', 
+    contentType = 'Lesson', 
+    content = '',
+    subject = 'General',
+    difficulty = 'Medium',
+    personalizedFor = null
+  } = route?.params || {};
 
-  const lessonContent = `
-# ${topic}
-
-## Introduction
-Newton's Laws of Motion are three fundamental principles that describe the relationship between forces acting on a body and its motion. These laws form the foundation of classical mechanics.
-
-## First Law (Law of Inertia)
-An object at rest stays at rest, and an object in motion stays in motion at constant velocity, unless acted upon by an external force.
-
-**Example:** When you're in a car that suddenly stops, your body continues moving forward due to inertia.
-
-## Second Law (F = ma)
-The acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass.
-
-**Formula:** F = ma
-- F = Force (Newtons)
-- m = Mass (kg)
-- a = Acceleration (m/s²)
-
-## Third Law (Action-Reaction)
-For every action, there is an equal and opposite reaction.
-
-**Example:** When you walk, you push backward on the ground, and the ground pushes forward on you.
-
-## Practice Questions
-1. A 5kg object accelerates at 2m/s². What force is applied?
-2. Explain why passengers feel pushed back when a car accelerates.
-`;
+  // Use AI-generated content if available, otherwise show default
+  const lessonContent = content || `# ${topic}\n\nContent is being generated...`;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -49,17 +30,23 @@ For every action, there is an equal and opposite reaction.
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.lessonHeader}>
-          <Text style={styles.subject}>Physics</Text>
+          <Text style={styles.subject}>{subject}</Text>
           <Text style={styles.title}>{topic}</Text>
           <View style={styles.metadata}>
             <View style={styles.metadataItem}>
-              <Ionicons name="time" size={16} color={colors.slate500} />
-              <Text style={styles.metadataText}>15 min read</Text>
+              <Ionicons name="sparkles" size={16} color={colors.primary} />
+              <Text style={styles.metadataText}>AI Generated</Text>
             </View>
             <View style={styles.metadataItem}>
               <Ionicons name="trending-up" size={16} color={colors.slate500} />
-              <Text style={styles.metadataText}>Intermediate</Text>
+              <Text style={styles.metadataText}>{difficulty}</Text>
             </View>
+            {personalizedFor && (
+              <View style={styles.metadataItem}>
+                <Ionicons name="heart" size={16} color={colors.primary} />
+                <Text style={styles.metadataText}>Personalized</Text>
+              </View>
+            )}
           </View>
         </View>
 
