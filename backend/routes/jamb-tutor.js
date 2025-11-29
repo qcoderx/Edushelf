@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
     console.log("User Query:", userQuery);
 
     // Parse the user's query using AI
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const parsingPrompt = `Extract subject, year, and question number from: "${userQuery}". Return JSON with keys: "subject", "year", "questionNumber". Set missing values to null.`;
 
     const parsingResult = await model.generateContent(parsingPrompt);
