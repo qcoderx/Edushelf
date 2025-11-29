@@ -3,7 +3,7 @@ services:
     name: lumina-backend
     env: node
     plan: free
-    rootDir: ./backend
+    rootDir: ./api
     buildCommand: npm install
     startCommand: node server.js
     envVars:
