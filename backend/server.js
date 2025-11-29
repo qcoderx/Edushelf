@@ -62,6 +62,47 @@ app.get('/', (req, res) => {
   });
 });
 
+// API Documentation
+app.get('/docs', (req, res) => {
+  res.json({
+    title: 'Lumina Backend API Documentation',
+    version: '1.0.0',
+    baseUrl: req.protocol + '://' + req.get('host'),
+    endpoints: {
+      'POST /api/auth/register': 'Register new user',
+      'POST /api/auth/login': 'Login user',
+      'GET /api/users/profile': 'Get user profile',
+      'POST /api/content/generate': 'Generate AI content',
+      'GET /api/progress': 'Get user progress',
+      'GET /api/leaderboard': 'Get leaderboard',
+      'POST /api/notebook/notes': 'Create note',
+      'GET /api/schedule': 'Get study schedule',
+      'POST /api/ai/chat': 'AI tutor chat',
+      'POST /api/ai/quiz': 'Generate quiz'
+    },
+    examples: {
+      register: {
+        url: '/api/auth/register',
+        method: 'POST',
+        body: {
+          name: 'John Doe',
+          email: 'john@example.com',
+          password: 'password123'
+        }
+      },
+      chat: {
+        url: '/api/ai/chat',
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer YOUR_TOKEN' },
+        body: {
+          message: 'Explain photosynthesis',
+          subject: 'Biology'
+        }
+      }
+    }
+  });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
