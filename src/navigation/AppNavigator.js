@@ -16,6 +16,7 @@ import DashboardScreen from '../screens/DashboardScreen';
 import AITutorChatScreen from '../screens/AITutorChatScreen';
 import ContentGeneratorScreen from '../screens/ContentGeneratorScreen';
 import ExerciseInterfaceScreen from '../screens/ExerciseInterfaceScreen';
+import PracticeTestSetupScreen from '../screens/PracticeTestSetupScreen';
 import LessonViewScreen from '../screens/LessonViewScreen';
 import ExerciseResultsScreen from '../screens/ExerciseResultsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -26,6 +27,8 @@ import LeaderboardScreen from '../screens/LeaderboardScreen';
 import VirtualLabHubScreen from '../screens/VirtualLabHubScreen';
 import ActiveExperimentScreen from '../screens/ActiveExperimentScreen';
 import TestScreen from '../screens/TestScreen';
+import SmartMaterialConverterScreen from '../screens/SmartMaterialConverterScreen';
+import ConvertedMaterialScreen from '../screens/ConvertedMaterialScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -95,6 +98,7 @@ const AppNavigator = () => (
       <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="AITutorChat" component={AITutorChatScreen} />
       <Stack.Screen name="ContentGenerator" component={ContentGeneratorScreen} />
+      <Stack.Screen name="PracticeTestSetup" component={PracticeTestSetupScreen} />
       <Stack.Screen name="ExerciseInterface" component={ExerciseInterfaceScreen} />
       <Stack.Screen name="LessonView" component={LessonViewScreen} />
       <Stack.Screen name="ExerciseResults" component={ExerciseResultsScreen} />
@@ -105,6 +109,8 @@ const AppNavigator = () => (
       <Stack.Screen name="VirtualLabHub" component={VirtualLabHubScreen} />
       <Stack.Screen name="ActiveExperiment" component={ActiveExperimentScreen} />
       <Stack.Screen name="Test" component={TestScreen} />
+      <Stack.Screen name="SmartMaterialConverter" component={SmartMaterialConverterScreen} />
+      <Stack.Screen name="ConvertedMaterial" component={ConvertedMaterialScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );

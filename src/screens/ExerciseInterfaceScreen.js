@@ -1,32 +1,109 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 
-const ExerciseInterfaceScreen = ({ navigation }) => {
-  const [selectedAnswer, setSelectedAnswer] = useState('C');
-  const currentQuestion = 5;
-  const totalQuestions = 20;
-  const progress = (currentQuestion / totalQuestions) * 100;
+const ExerciseInterfaceScreen = ({ navigation, route }) => {
+  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [userProfile, setUserProfile] = useState(null);
 
-  const question = {
-    text: "In a series R-L-C circuit, the voltage across the resistor and the inductor are 20V and 40V respectively. What is the voltage across the capacitor if the source voltage is 50V?",
-    options: [
-      { id: 'A', text: 'A. 10V' },
-      { id: 'B', text: 'B. 20V' },
-      { id: 'C', text: 'C. 30V' },
-      { id: 'D', text: 'D. 40V' },
-    ]
+  const { examType, subject, difficulty, questionCount } = route.params || {};
+
+  useEffect(() => {
+    loadUserProfile();
+    generateQuestions();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await AsyncStorage.getItem('userProfile');
+      if (profile) {
+        setUserProfile(JSON.parse(profile));
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    }
   };
 
-  const handleSubmit = () => {
-    navigation.navigate('ExerciseResults', { 
-      selectedAnswer, 
-      correctAnswer: 'C',
-      currentQuestion,
-      totalQuestions 
-    });
+  const generateQuestions = async () => {
+    try {
+      const response = await fetch('https://edushelf-re0u.onrender.com/api/practice-test/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          examType: examType || 'General',
+          subject: subject || 'Mathematics',
+          difficulty: difficulty || 'medium',
+          questionCount: questionCount || 10,
+          userProfile
+        })
+      });
+      
+      const data = await response.json();
+      if (data.questions) {
+        setQuestions(data.questions);
+      }
+    } catch (error) {
+      console.error('Error generating questions:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const currentQuestion = questions[currentQuestionIndex];
+  const totalQuestions = questions.length;
+  const progress = totalQuestions > 0 ? ((currentQuestionIndex + 1) / totalQuestions) * 100 : 0;
+
+  const handleNext = () => {
+    if (selectedAnswer) {
+      setUserAnswers(prev => ({
+        ...prev,
+        [currentQuestionIndex]: selectedAnswer
+      }));
+      
+      if (currentQuestionIndex < totalQuestions - 1) {
+        setCurrentQuestionIndex(prev => prev + 1);
+        setSelectedAnswer('');
+      } else {
+        // Test completed
+        navigation.navigate('ExerciseResults', {
+          questions,
+          userAnswers: { ...userAnswers, [currentQuestionIndex]: selectedAnswer },
+          examType,
+          subject
+        });
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={styles.loadingText}>Generating your practice test...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!currentQuestion) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Failed to load questions</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={generateQuestions}>
+            <Text style={styles.retryText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,13 +111,13 @@ const ExerciseInterfaceScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={24} color={colors.white} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Physics - Practice Set 1</Text>
+        <Text style={styles.headerTitle}>{examType} {subject}</Text>
         <View style={styles.headerSpacer} />
       </View>
 
       <View style={styles.progressSection}>
         <View style={styles.progressHeader}>
-          <Text style={styles.questionCounter}>Question {currentQuestion} of {totalQuestions}</Text>
+          <Text style={styles.questionCounter}>Question {currentQuestionIndex + 1} of {totalQuestions}</Text>
         </View>
         <View style={styles.progressBar}>
           <View style={[styles.progressFill, { width: `${progress}%` }]} />
@@ -48,11 +125,11 @@ const ExerciseInterfaceScreen = ({ navigation }) => {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={styles.questionTitle}>Question {currentQuestion}</Text>
-        <Text style={styles.questionText}>{question.text}</Text>
+        <Text style={styles.questionTitle}>Question {currentQuestionIndex + 1}</Text>
+        <Text style={styles.questionText}>{currentQuestion.question}</Text>
 
         <View style={styles.optionsContainer}>
-          {question.options.map((option) => (
+          {currentQuestion.options.map((option) => (
             <TouchableOpacity
               key={option.id}
               style={[
@@ -67,15 +144,21 @@ const ExerciseInterfaceScreen = ({ navigation }) => {
               ]}>
                 {selectedAnswer === option.id && <View style={styles.radioDot} />}
               </View>
-              <Text style={styles.optionText}>{option.text}</Text>
+              <Text style={styles.optionText}>{option.id.toUpperCase()}. {option.text}</Text>
             </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Submit Answer</Text>
+        <TouchableOpacity 
+          style={[styles.submitButton, !selectedAnswer && styles.disabledButton]} 
+          onPress={handleNext}
+          disabled={!selectedAnswer}
+        >
+          <Text style={[styles.submitButtonText, !selectedAnswer && styles.disabledText]}>
+            {currentQuestionIndex < totalQuestions - 1 ? 'Next Question' : 'Finish Test'}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -203,6 +286,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   submitButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.black,
+  },
+  disabledButton: {
+    backgroundColor: colors.slate600,
+  },
+  disabledText: {
+    color: colors.slate400,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 16,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: colors.white,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 16,
+  },
+  errorText: {
+    fontSize: 16,
+    color: colors.slate400,
+  },
+  retryButton: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: colors.black,

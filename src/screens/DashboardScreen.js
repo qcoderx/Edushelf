@@ -19,6 +19,8 @@ const DashboardScreen = ({ navigation }) => {
     { id: 'digital-notebook', name: 'Digital Notebook', icon: 'book', screen: 'DigitalNotebook' },
     { id: 'leaderboard', name: 'Leaderboard', icon: 'trophy', screen: 'Leaderboard' },
     { id: 'virtual-lab', name: 'Virtual Lab', icon: 'flask', screen: 'VirtualLabHub' },
+    { id: 'material-converter', name: 'Material Converter', icon: 'document-text', screen: 'SmartMaterialConverter' },
+    { id: 'material-converter', name: 'Material Converter', icon: 'document-text', screen: 'SmartMaterialConverter' },
   ];
 
   useEffect(() => {

@@ -106,6 +106,77 @@ class ApiService {
       body: JSON.stringify(data),
     });
   }
+
+  // Materials endpoints
+  async convertMaterial(materialData) {
+    const formData = new FormData();
+    
+    // Create a mock file for demo
+    const blob = new Blob([`Mock content for ${materialData.file.name}`], { type: 'text/plain' });
+    formData.append('material', blob, materialData.file.name);
+    formData.append('interests', materialData.interests);
+    formData.append('learningStyle', materialData.learningStyle);
+    formData.append('difficulty', materialData.difficulty);
+
+    const config = {
+      method: 'POST',
+      body: formData,
+      headers: {
+        ...(this.token && { 'Authorization': `Bearer ${this.token}` })
+      }
+    };
+
+    // Remove Content-Type to let browser set it with boundary for FormData
+    const url = `${this.baseURL}/materials/convert`;
+    
+    try {
+      const response = await fetch(url, config);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Material conversion failed:', error);
+      throw error;
+    }
+  }
+
+  async getMaterialHistory() {
+    return this.request('/materials/history');
+  }
+
+  async getMaterialConversion(conversionId) {
+    return this.request(`/materials/conversion/${conversionId}`);
+  }
+
+  // Materials endpoints
+  async convertMaterial(materialData) {
+    const formData = new FormData();
+    formData.append('material', {
+      uri: materialData.file.uri,
+      type: materialData.file.mimeType || 'application/octet-stream',
+      name: materialData.file.name
+    });
+    formData.append('interests', materialData.interests);
+    formData.append('learningStyle', materialData.learningStyle);
+    formData.append('difficulty', materialData.difficulty);
+
+    return this.request('/materials/convert', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        ...(this.token && { 'Authorization': `Bearer ${this.token}` })
+      }
+    });
+  }
+
+  async getMaterialHistory() {
+    return this.request('/materials/history');
+  }
+
+  async getMaterialConversion(conversionId) {
+    return this.request(`/materials/conversion/${conversionId}`);
+  }
 }
 
 export default new ApiService();

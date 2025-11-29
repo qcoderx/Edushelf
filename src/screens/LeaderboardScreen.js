@@ -218,11 +218,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 6,
+    height: 44,
   },
   backButton: {
-    padding: 8,
-    marginLeft: -8,
+    padding: 4,
+    marginLeft: -4,
   },
   headerTitle: {
     fontSize: 18,

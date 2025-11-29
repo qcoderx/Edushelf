@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,12 +7,30 @@ import ApiService from '../services/api';
 
 const ContentGeneratorScreen = ({ navigation }) => {
   const [contentType, setContentType] = useState('Lesson');
+  const [subject, setSubject] = useState('Mathematics');
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState(45);
   const [learningStyle, setLearningStyle] = useState('Default (Adaptive)');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await AsyncStorage.getItem('userProfile');
+      if (profile) {
+        setUserProfile(JSON.parse(profile));
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    }
+  };
 
   const contentTypes = ['Lesson', 'Summary', 'Practice Questions'];
+  const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'Economics', 'Government'];
   const learningStyles = ['Default (Adaptive)', 'Visual', 'Auditory', 'Kinesthetic'];
 
   const handleGenerate = async () => {
@@ -24,23 +42,35 @@ const ContentGeneratorScreen = ({ navigation }) => {
     setIsGenerating(true);
     
     try {
-      const token = await AsyncStorage.getItem('userToken');
-      if (token) {
-        ApiService.setToken(token);
+      const response = await fetch('https://edushelf-re0u.onrender.com/api/content/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject,
+          topic: topic.trim(),
+          difficulty: getDifficultyLabel().toLowerCase(),
+          contentType: contentType.toLowerCase(),
+          learningStyle: learningStyle === 'Default (Adaptive)' ? userProfile?.learningStyle?.[0] || 'visual' : learningStyle.toLowerCase(),
+          userProfile: {
+            interests: userProfile?.interests || [],
+            name: userProfile?.name || 'Student'
+          }
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.content) {
+        navigation.navigate('LessonView', {
+          topic,
+          subject,
+          contentType,
+          difficulty: getDifficultyLabel(),
+          content: data.content
+        });
+      } else {
+        throw new Error(data.error || 'Failed to generate content');
       }
-      
-      const response = await ApiService.generateContent({
-        subject: 'Mathematics',
-        topic: topic.trim(),
-        difficulty: getDifficultyLabel().toLowerCase()
-      });
-      
-      navigation.navigate('LessonView', {
-        topic,
-        contentType,
-        difficulty: getDifficultyLabel(),
-        content: response
-      });
     } catch (error) {
       Alert.alert('Error', error.message || 'Failed to generate content. Please try again.');
     } finally {
@@ -88,14 +118,27 @@ const ContentGeneratorScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.inputSection}>
+          <Text style={styles.label}>Subject</Text>
+          <View style={styles.selectContainer}>
+            <Text style={styles.selectText}>{subject}</Text>
+            <Ionicons name="chevron-down" size={20} color={colors.slate500} />
+          </View>
+        </View>
+
+        <View style={styles.inputSection}>
           <Text style={styles.label}>Enter a topic</Text>
           <TextInput
             style={styles.input}
-            placeholder="e.g., 'Newton's Laws of Motion'"
+            placeholder={`e.g., ${subject === 'Physics' ? "Newton's Laws of Motion" : subject === 'Chemistry' ? 'Organic Compounds' : 'Quadratic Equations'}`}
             placeholderTextColor={colors.slate500}
             value={topic}
             onChangeText={setTopic}
           />
+          {userProfile?.interests?.length > 0 && (
+            <Text style={styles.hintText}>
+              💡 Content will be personalized using your interests: {userProfile.interests.slice(0, 2).join(', ')}
+            </Text>
+          )}
         </View>
 
         <View style={styles.sliderSection}>
@@ -295,6 +338,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: colors.black,
+  },
+  hintText: {
+    fontSize: 12,
+    color: colors.primary,
+    marginTop: 8,
+    fontStyle: 'italic',
   },
 });
 

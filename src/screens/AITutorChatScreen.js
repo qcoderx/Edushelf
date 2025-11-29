@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
   Text,
@@ -19,6 +20,21 @@ import ApiService from '../services/api';
 const AITutorChatScreen = ({ route }) => {
   const [inputText, setInputText] = useState('');
   const [selectedTutor, setSelectedTutor] = useState(route?.params?.tutor || 'JAMB');
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      try {
+        const profile = await AsyncStorage.getItem('userProfile');
+        if (profile) {
+          setUserProfile(JSON.parse(profile));
+        }
+      } catch (error) {
+        console.error('Error loading user profile:', error);
+      }
+    };
+    loadUserProfile();
+  }, []);
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -96,7 +112,7 @@ const AITutorChatScreen = ({ route }) => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             question: messageText,
-            userProfile: { name: 'Student', interests: ['Technology', 'Science'] }
+            userProfile: userProfile || { name: 'Student', interests: ['Technology', 'Science'] }
           })
         });
         response = await apiResponse.json();
@@ -106,7 +122,7 @@ const AITutorChatScreen = ({ route }) => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             question: messageText,
-            userProfile: { name: 'Student', interests: ['Technology', 'Science'] }
+            userProfile: userProfile || { name: 'Student', interests: ['Technology', 'Science'] }
           })
         });
         response = await apiResponse.json();
@@ -245,13 +261,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 6,
+    height: 44,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255, 255, 255, 0.1)',
   },
   headerButton: {
-    width: 48,
-    height: 48,
+    width: 32,
+    height: 32,
     justifyContent: 'center',
     alignItems: 'center',
   },
