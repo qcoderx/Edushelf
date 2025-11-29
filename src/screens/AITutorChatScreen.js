@@ -92,7 +92,7 @@ const AITutorChatScreen = ({ route }) => {
       let response;
       if (selectedTutor === 'JAMB') {
         // Call JAMB tutor endpoint directly
-        const apiResponse = await fetch('http://localhost:3000/jamb-tutor', {
+        const apiResponse = await fetch('https://edushelf-re0u.onrender.com/jamb-tutor', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ const AITutorChatScreen = ({ route }) => {
         response = await apiResponse.json();
       } else if (selectedTutor === 'WAEC') {
         // Call WAEC tutor endpoint directly
-        const apiResponse = await fetch('http://localhost:3000/waec-tutor', {
+        const apiResponse = await fetch('https://edushelf-re0u.onrender.com/waec-tutor', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

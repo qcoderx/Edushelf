@@ -14,6 +14,8 @@ const leaderboardRoutes = require('./routes/leaderboard');
 const notebookRoutes = require('./routes/notebook');
 const scheduleRoutes = require('./routes/schedule');
 const aiRoutes = require('./routes/ai');
+const jambTutorRoutes = require('./routes/jamb-tutor');
+const waecTutorRoutes = require('./routes/waec-tutor');
 
 const app = express();
 
@@ -468,6 +470,8 @@ app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/notebook', notebookRoutes);
 app.use('/api/schedule', scheduleRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/jamb-tutor', jambTutorRoutes);
+app.use('/waec-tutor', waecTutorRoutes);
 
 // Root route
 app.get('/', (req, res) => {
