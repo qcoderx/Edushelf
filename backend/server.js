@@ -43,6 +43,25 @@ app.use('/api/notebook', notebookRoutes);
 app.use('/api/schedule', scheduleRoutes);
 app.use('/api/ai', aiRoutes);
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Lumina Backend API',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      auth: '/api/auth',
+      users: '/api/users', 
+      content: '/api/content',
+      progress: '/api/progress',
+      leaderboard: '/api/leaderboard',
+      notebook: '/api/notebook',
+      schedule: '/api/schedule',
+      ai: '/api/ai'
+    }
+  });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
